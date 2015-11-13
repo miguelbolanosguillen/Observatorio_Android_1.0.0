@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/itmem1"
+            android:checked="true"
+            android:icon="@drawable/ic_file_document"
+            android:title="@string/item1" />
+        <item
+            android:id="@+id/item2"
+            android:icon="@drawable/ic_file_document"
+            android:title="@string/item2" />
+        <item
+            android:id="@+id/item3"
+            android:icon="@drawable/ic_file_document"
+            android:title="@string/item3" />
+        <item
+            android:id="@+id/item4"
+            android:icon="@drawable/ic_file_document"
+            android:title="@string/item4" />
+        <item
+            android:id="@+id/item5"
+            android:icon="@drawable/ic_file_document"
+            android:title="@string/item5" />
+        <item
+            android:id="@+id/item6"
+            android:icon="@drawable/ic_file_document"
+            android:title="@string/item6" />
+        <item
+            android:id="@+id/itme7"
+            android:icon="@drawable/ic_file_document"
+            android:title="@string/item7" />
+        <item
+            android:id="@+id/item8"
+            android:icon="@drawable/ic_file_document"
+            android:title="@string/item8" />
+        <item
+            android:id="@+id/item9"
+            android:icon="@drawable/ic_file_document"
+            android:title="@string/item9" />
+
+        <!-- Sección de configuración -->
+        <item
+            android:id="@+id/configuration_section"
+            android:title="@string/configuracion_item">
+            <menu>
+                <item
+                    android:id="@+id/nav_log_out"
+                    android:icon="@android:drawable/ic_lock_power_off"
+                    android:title="@string/log_out_item" />
+            </menu>
+        </item>
+    </group>
+
+</menu>
