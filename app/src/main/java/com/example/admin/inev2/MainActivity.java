@@ -180,11 +180,10 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     public void prueba(View v){
-        Intent act=new Intent(this,Main2Activity.class);
-        Toast.makeText(this,"flotante",Toast.LENGTH_SHORT).show();
-        startActivity(act);
-       // Snackbar.make(v, "Replace with your own action", Snackbar.LENGTH_LONG)
-               // .setAction("Action", null).show();
+        //Intent act=new Intent(this,Main2Activity.class);
+        Toast.makeText(this,"flotante1",Toast.LENGTH_SHORT).show();
+       // startActivity(act);
+
     }
 
 }
