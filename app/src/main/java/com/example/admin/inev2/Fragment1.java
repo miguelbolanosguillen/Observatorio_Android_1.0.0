@@ -16,7 +16,7 @@ public class Fragment1 extends Fragment {
     public Fragment1() {
         // Required empty public constructor
     }
-
+// prueba de coment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
