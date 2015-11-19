@@ -187,5 +187,8 @@ public class MainActivity extends AppCompatActivity {
 
     }
     //primer comentarios desde mi cuenta marco
+    public void prueba_metodo(){
+        String comentario="agregando codigo";
+    }
 
 }
