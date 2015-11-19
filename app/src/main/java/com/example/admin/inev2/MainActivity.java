@@ -189,6 +189,7 @@ public class MainActivity extends AppCompatActivity {
     //primer comentarios desde mi cuenta marco
     public void prueba_metodo(){
         String comentario="agregando codigo";
+        Toast.makeText(this,comentario,Toast.LENGTH_SHORT).show();
     }
 
 }
