@@ -180,6 +180,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     public void prueba(View v){
+        //metodo del boton glotante
         //Intent act=new Intent(this,Main2Activity.class);
         Toast.makeText(this,"flotante1",Toast.LENGTH_SHORT).show();
        // startActivity(act);
