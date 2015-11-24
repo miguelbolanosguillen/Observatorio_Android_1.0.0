@@ -190,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
     public void prueba_metodo(){
         String comentario="agregando codigo";
         Toast.makeText(this,comentario,Toast.LENGTH_SHORT).show();
-        //comentario primera modificacion
+        //comentario primera modificacion1
     }
 
 }
