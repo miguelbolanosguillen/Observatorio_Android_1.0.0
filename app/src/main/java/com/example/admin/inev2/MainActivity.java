@@ -181,9 +181,9 @@ public class MainActivity extends AppCompatActivity {
     }
     public void prueba(View v){
         //metodo del boton glotante
-        //Intent act=new Intent(this,Main2Activity.class);
+        Intent act=new Intent(this,Main2Activity.class);
         Toast.makeText(this,"flotante1",Toast.LENGTH_SHORT).show();
-       // startActivity(act);
+        startActivity(act);
 
     }
     //primer comentarios desde mi cuenta marco
