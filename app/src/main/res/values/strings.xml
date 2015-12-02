@@ -22,5 +22,7 @@
     <string name="fragment1">Fragment 1</string>
     <string name="fragment2">Fragment 2</string>
     <string name="fragment3">Fragment 3</string>
+    <string name="informe1">Fragment informe</string>
     <string name="title_activity_main2">Main2</string>
+    <string name="title_activity_informe">InformeActivity</string>
 </resources>

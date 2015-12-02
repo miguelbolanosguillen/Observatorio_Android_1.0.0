@@ -65,8 +65,10 @@ public class MainActivity extends AppCompatActivity {
                                 fragmentTransaction = true;
                                 break;
                             case R.id.item3:
-                                fragment = new Fragment3();
+                               fragment = new FragmenInforme();
                                 fragmentTransaction = true;
+
+
                                 break;
                             case R.id.item4:
                                 Log.i("NavigationView", "Pulsada opción 4");
@@ -78,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
                                 Log.i("NavigationView", "Pulsada opción 5");
                                 menuItem.setChecked(true);
                                 getSupportActionBar().setTitle(menuItem.getTitle());
+
 
                                 break;
                             case R.id.item6:
