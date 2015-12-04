@@ -1,32 +1,39 @@
-package com.example.admin.inev2;
+package com.example.admin.inev2.activity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-
-import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.admin.inev2.*;
+import com.example.admin.inev2.helper.UserSessionManager;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_SIGNUP = 0;
 
-    @InjectView(R.id.input_email) EditText _emailText;
-    @InjectView(R.id.input_password) EditText _passwordText;
-    @InjectView(R.id.btn_login) Button _loginButton;
-    @InjectView(R.id.link_signup) TextView _signupLink;
+    @InjectView(R.id.input_email)
+    EditText _emailText;
+    @InjectView(R.id.input_password)
+    EditText _passwordText;
+    @InjectView(R.id.btn_login)
+    Button _loginButton;
+    @InjectView(R.id.link_signup)
+    TextView _signupLink;
 
     // User Session Manager Class
     UserSessionManager session;
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +42,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // User Session Manager
         session = new UserSessionManager(getApplicationContext());
-        
+
         _loginButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -54,7 +61,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-
     public void login() {
         Log.d(TAG, "Login");
 
@@ -77,15 +83,15 @@ public class LoginActivity extends AppCompatActivity {
         // TODO: Implement your own authentication logic here.
 
         if((email.equals(ema))&&(password.equals(pas)))
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onLoginSuccess or onLoginFailed
-                        onLoginSuccess("admin",email);
-                        // onLoginFailed();
-                        progressDialog.dismiss();
-                    }
-                }, 3000);
+            new android.os.Handler().postDelayed(
+                    new Runnable() {
+                        public void run() {
+                            // On complete call either onLoginSuccess or onLoginFailed
+                            onLoginSuccess("admin",email);
+                            // onLoginFailed();
+                            progressDialog.dismiss();
+                        }
+                    }, 3000);
     }
 
 
@@ -112,7 +118,7 @@ public class LoginActivity extends AppCompatActivity {
         session.createUserLoginSession(nom,mail1);
 
         // Starting MainActivity
-        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+        Intent i = new Intent(getApplicationContext(), com.example.admin.inev2.MainActivity.class);
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         // Add new Flag to start new Activity
@@ -150,3 +156,25 @@ public class LoginActivity extends AppCompatActivity {
         return valid;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

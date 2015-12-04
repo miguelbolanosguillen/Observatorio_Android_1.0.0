@@ -1,4 +1,4 @@
-package com.example.admin.inev2;
+package com.example.admin.inev2.helper;
 
 /**
  * Created by admin on 29/09/2015.
@@ -8,6 +8,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+
+
+import com.example.admin.inev2.activity.LoginActivity;
 
 import java.util.HashMap;
 

@@ -1,4 +1,4 @@
-package com.example.admin.inev2;
+package com.example.admin.inev2.activity;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -9,6 +9,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+
+import com.example.admin.inev2.R;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;

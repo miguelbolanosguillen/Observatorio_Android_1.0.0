@@ -21,8 +21,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.admin.inev2.activity.Main2Activity;
+import com.example.admin.inev2.fragment.FragmenInforme;
+import com.example.admin.inev2.fragment.Fragment1;
+import com.example.admin.inev2.fragment.Fragment2;
+import com.example.admin.inev2.helper.UserSessionManager;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+
 
 public class MainActivity extends AppCompatActivity {
     UserSessionManager session;

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.admin.inev2" >
+    package="com.example.admin.inev2" android:versionCode="1" android:versionName="1.0">
+
 
     <application
         android:allowBackup="true"
@@ -16,23 +17,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".LoginActivity"
-            android:theme="@style/AppTheme.Dark" />
-        <activity
-            android:name=".SignupActivity"
-            android:theme="@style/AppTheme.Dark" />
-        <activity
-            android:name=".Main2Activity"
-            android:label="@string/title_activity_main2" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-        </activity>
-        <activity
-            android:name=".InformeActivity"
-            android:label="@string/title_activity_informe" >
-        </activity>
+        <activity android:name=".activity.LoginActivity"/>
+        <activity android:name=".activity.SignupActivity"/>
+        <activity android:name=".activity.Main2Activity"/>
+        <activity android:name=".activity.InformeActivity"/>
     </application>
-
+    <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>

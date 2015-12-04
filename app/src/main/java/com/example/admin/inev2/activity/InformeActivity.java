@@ -1,9 +1,12 @@
-package com.example.admin.inev2;
+package com.example.admin.inev2.activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.example.admin.inev2.R;
+
 
 public class InformeActivity extends AppCompatActivity {
 
