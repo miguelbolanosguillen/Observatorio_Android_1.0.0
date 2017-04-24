@@ -1,26 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.admin.inev2" android:versionCode="1" android:versionName="1.0">
+    package="com.example.admin.observav1">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/omlogo"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name" >
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name="com.example.admin.observav1.InicioActivity"
+
+            android:configChanges="screenSize|orientation">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.LoginActivity"/>
-        <activity android:name=".activity.SignupActivity"/>
-        <activity android:name=".activity.Main2Activity"/>
-        <activity android:name=".activity.InformeActivity"/>
+        <activity android:name="com.example.admin.observav1.MainActivity"
+            android:configChanges="screenSize|orientation"></activity>
+        <activity android:name="com.example.admin.observav1.GraficaActivity" />
+
     </application>
-    <uses-permission android:name="android.permission.INTERNET"/>
+
 </manifest>

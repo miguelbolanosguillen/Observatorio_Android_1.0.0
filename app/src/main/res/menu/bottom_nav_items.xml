@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_reporte"
+        android:icon="@drawable/iconreportes"
+        android:title="@string/menu_reporte" />
+
+    <item
+        android:id="@+id/menu_informe"
+        android:icon="@drawable/iconinforme"
+        android:title="@string/menu_informe" />
+
+    <item
+        android:id="@+id/menu_configuracion"
+        android:icon="@drawable/iconconfiguracion"
+        android:title="@string/menu_configuracion"/>
+</menu>

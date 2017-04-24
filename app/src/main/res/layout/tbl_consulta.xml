@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_scroll_table"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="1dp"
+    android:paddingLeft="1dp"
+    android:paddingRight="1dp"
+    android:paddingTop="1dp">
+
+    <LinearLayout
+        android:id="@+id/ComponenteA"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TableLayout
+            android:id="@+id/_TablaA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </TableLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ComponenteB"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_toRightOf="@id/ComponenteA"
+        android:orientation="horizontal">
+
+        <HorizontalScrollView
+            android:id="@+id/HSV_B"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:overScrollMode="ifContentScrolls"
+            android:isScrollContainer="true"
+            android:nestedScrollingEnabled="true"
+            android:scrollbars="none"
+            android:scrollbarSize="0dp">
+
+            <TableLayout
+                android:id="@+id/_TablaB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </TableLayout>
+        </HorizontalScrollView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ComponenteC"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ComponenteA">
+
+        <com.example.admin.observav1.ObservableScrollView
+            android:id="@+id/SV_C"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scrollbars="none"
+            android:scrollbarSize="0dp">
+
+            <TableLayout
+                android:id="@+id/_TablaC"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+            </TableLayout>
+
+        </com.example.admin.observav1.ObservableScrollView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ComponenteD"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ComponenteB"
+        android:layout_toRightOf="@id/ComponenteC"
+        android:orientation="horizontal">
+
+        <com.example.admin.observav1.ObservableScrollView
+            android:id="@+id/SV_D"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scrollbars="none"
+            android:scrollbarSize="0dp">
+
+            <HorizontalScrollView
+                android:id="@+id/HSV_D"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:overScrollMode="ifContentScrolls"
+                android:isScrollContainer="true"
+                android:nestedScrollingEnabled="true"
+                android:scrollbars="none"
+                android:scrollbarSize="0dp">
+
+                <TableLayout
+                    android:id="@+id/_TablaD"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                </TableLayout>
+            </HorizontalScrollView>
+        </com.example.admin.observav1.ObservableScrollView>
+
+    </LinearLayout>
+
+</RelativeLayout>
