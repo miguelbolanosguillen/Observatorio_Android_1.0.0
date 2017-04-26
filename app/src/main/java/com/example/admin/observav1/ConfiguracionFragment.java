@@ -114,7 +114,7 @@ public class ConfiguracionFragment extends Fragment {
             case R.id.action_buscar:
                // Toast.makeText(getActivity(), "action buscar", Toast.LENGTH_SHORT).show();
                 ReporteFragment fr1=new ReporteFragment();
-                fr1.pruebaBoton();
+                //fr1.pruebaBoton();
                 break;
 
             case R.id.action_buscar_uno:
