@@ -8,65 +8,66 @@
         android:id="@+id/layoutGeneral"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_weight="1"
         android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/layoutEditText"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
+            android:layout_gravity="center"
             android:layout_weight="2"
-            android:orientation="vertical"
-            android:layout_gravity="center">
+            android:orientation="vertical">
             <!-- usuario Label -->
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <EditText android:id="@+id/oet_Usuario"
+
+                <EditText
+                    android:id="@+id/oet_Usuario"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
                     android:hint="Ingresa Usuario"
-                    android:singleLine="true"/>
+                    android:inputType="textPersonName"
+                    android:maxLines="1" />
             </android.support.design.widget.TextInputLayout>
 
             <!-- Password Label -->
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <EditText android:id="@+id/oet_Clave"
+
+                <EditText
+                    android:id="@+id/oet_Clave"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPassword"
                     android:hint="Password"
-                    android:singleLine="true"/>
+                    android:inputType="textPassword"
+                    android:maxLines="1" />
             </android.support.design.widget.TextInputLayout>
+
             <LinearLayout
                 android:id="@+id/layouBotones"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_gravity="center">
+                android:layout_gravity="center"
+                android:orientation="horizontal">
 
-                <!--<Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/botonse"
-                    android:text="ingresar"/>-->
                 <android.support.v7.widget.AppCompatButton
-                    app:backgroundTint="@color/colorAccent"
+                    android:id="@+id/botonse"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="ingresar"
                     android:textColor="@color/color_home"
-                    android:id="@+id/botonse"/>
+                    app:backgroundTint="@color/colorAccent" />
 
                 <android.support.v7.widget.AppCompatButton
-                    app:backgroundTint="@color/colorAccent"
+                    android:id="@+id/botonCancelar1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Cancelar"
                     android:textColor="@color/color_home"
-                    android:id="@+id/botonCancelar1"/>
+                    app:backgroundTint="@color/colorAccent" />
 
 
             </LinearLayout>
@@ -77,14 +78,15 @@
             android:id="@+id/layoutlista"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
             android:layout_marginLeft="50dp"
-            android:layout_marginRight="50dp">
+            android:layout_marginRight="50dp"
+            android:layout_weight="2">
+
             <ListView
+                android:id="@+id/listViewResponsabilidades"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/listViewResponsabilidades"
-                android:background="@color/color_home"/>
+                android:background="@color/color_home" />
         </LinearLayout>
     </LinearLayout>
 

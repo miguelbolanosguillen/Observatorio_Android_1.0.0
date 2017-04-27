@@ -15,11 +15,14 @@ import android.view.View;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
+import static com.example.admin.observav1.ConfiguracionFragment._btn_rep;
+
 public class MainActivity extends AppCompatActivity implements MiComunicacion{
     private static final String SELECTED_ITEM = "arg_selected_item";
     private BottomNavigationView mBottomNav;
     private int mSelectedItem;
     private Toolbar appbar;
+    public static boolean l_EdoEjer=true;     // c_mabg1
     Fragment finf,fconf,frepo,detf;
     FloatingActionButton fabGrafica;
     FloatingActionsMenu famb;
@@ -126,6 +129,10 @@ public class MainActivity extends AppCompatActivity implements MiComunicacion{
                 //muetraBotonesFlotante();
                 ocultarFragmentos();
                 muestraFragmento(frepo);
+                if ( l_EdoEjer ) {                  // c_mabg_1
+                    _btn_rep[0].performClick();
+                    l_EdoEjer = false;
+                }
                 break;
 
             /*case R.id.menu_informe:
