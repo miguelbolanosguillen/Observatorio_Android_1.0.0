@@ -53,10 +53,11 @@ public class MainActivity extends AppCompatActivity implements MiComunicacion{
 
         MenuItem selectedItem;
         if (savedInstanceState != null) {
-            mSelectedItem = savedInstanceState.getInt(SELECTED_ITEM, 2);
+            mSelectedItem = savedInstanceState.getInt(SELECTED_ITEM, 1);
             selectedItem = mBottomNav.getMenu().findItem(mSelectedItem);
+
         } else {
-            selectedItem = mBottomNav.getMenu().getItem(2);
+            selectedItem = mBottomNav.getMenu().getItem(1);
         }
         selectFragment(selectedItem);
 
@@ -122,16 +123,16 @@ public class MainActivity extends AppCompatActivity implements MiComunicacion{
 
         switch (item.getItemId()) {
             case R.id.menu_reporte:
-                muetraBotonesFlotante();
+                //muetraBotonesFlotante();
                 ocultarFragmentos();
                 muestraFragmento(frepo);
                 break;
 
-            case R.id.menu_informe:
+            /*case R.id.menu_informe:
                 ocultaBotonesFlotante();
                 ocultarFragmentos();
                 muestraFragmento(finf);
-                break;
+                break;*/
 
             case R.id.menu_configuracion:
 

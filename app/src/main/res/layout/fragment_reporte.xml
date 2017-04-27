@@ -38,7 +38,7 @@
                 <LinearLayout
                     android:id="@+id/_lly_reportes"
                     android:layout_width="0dp"
-                    android:layout_weight="4"
+                    android:layout_weight="5"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
                     <HorizontalScrollView
@@ -59,12 +59,13 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:gravity="center">
+                    android:orientation="vertical">
                     <TextView
                         android:id="@+id/txt_consulta"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="fecha"/>
+                        android:text="fecha"
+                        android:layout_gravity="right"/>
 
                 </LinearLayout>
 
@@ -95,7 +96,7 @@
                     android:id="@+id/_lly_filtros"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="4"
+                    android:layout_weight="5"
                     android:orientation="horizontal">
 
                     <HorizontalScrollView
@@ -114,13 +115,18 @@
                     </HorizontalScrollView>
 
                 </LinearLayout>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
+                    android:layout_gravity="right"
                     android:text="Ningun filtro Ati" />
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -145,7 +151,7 @@
 
                 <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_weight="4"
+                    android:layout_weight="5"
                     android:layout_height="wrap_content">
                     <HorizontalScrollView
                         android:layout_width="wrap_content"

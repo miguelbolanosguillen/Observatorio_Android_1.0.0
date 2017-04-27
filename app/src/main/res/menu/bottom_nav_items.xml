@@ -6,10 +6,10 @@
         android:icon="@drawable/iconreportes"
         android:title="@string/menu_reporte" />
 
-    <item
+    <!-- <item
         android:id="@+id/menu_informe"
         android:icon="@drawable/iconinforme"
-        android:title="@string/menu_informe" />
+        android:title="@string/menu_informe"/> -->
 
     <item
         android:id="@+id/menu_configuracion"

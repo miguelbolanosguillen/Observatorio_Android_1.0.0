@@ -6,10 +6,10 @@
         android:icon="@drawable/ic_delta"
         android:title="buscar"
         yourapp:showAsAction="ifRoom"
-        android:visible="true"/>
+        android:visible="false"/>
     <item android:id="@+id/action_buscar_uno"
         android:icon="@drawable/ic_checkbox_blank_circle_outline"
         android:title="buscar"
         yourapp:showAsAction="ifRoom"
-        android:visible="true"/>
+        android:visible="false"/>
 </menu>
