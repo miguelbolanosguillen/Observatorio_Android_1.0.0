@@ -42,7 +42,7 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
 import static com.example.admin.observav1.MainActivity.g_contexto;
 import static com.example.admin.observav1.MainActivity.l_EdoEjer;
 
-public class ConfiguracionFragment extends Fragment {
+    public class ConfiguracionFragment extends Fragment {
     Button botonSe2, botonCancelar, botonCerrarSesion, boton_sel1;
     EditText g_usr, g_cve;
     public c_php_jason o_ldap = new c_php_jason();
@@ -69,7 +69,7 @@ public class ConfiguracionFragment extends Fragment {
     public static Button[] _btn_agrupa;
 
     private _lv_Cata[] _lv_filtro;
-    private LinearLayout _ly_Cata;
+    public LinearLayout _ly_Cata;
 
     private c_valor observatorio = new c_valor();
     public String[] a_Agrupa_Des, a_Filtros, a_Agrupa_Campo, a_Cam_Json;
@@ -85,7 +85,7 @@ public class ConfiguracionFragment extends Fragment {
     private Integer[] a_Ancho, a_Alto, a_Tamano;
     public int nCol_Fijas = -1;
     ArrayAdapter adp_responsa = null;
-    LinearLayout _ly_tbl;
+    public LinearLayout _ly_tbl;
     ArrayList<String> a_id_responsabilidad;
     private String[] aFilDat;
     private sel_filtro[] _sel_filtro;
@@ -706,11 +706,14 @@ public class ConfiguracionFragment extends Fragment {
 
                 _btn_filtro = new Button[nFil];
                 //Log.v("Filtro long=",Integer.toString(_btn_filtro.length));
+                if (_ly_Cata != null)          // c_mabg_27_abr_2017
+                    _ly_Cata.removeAllViews();  // c_mabg_27_abr_2017
                 _ly_filtros = (LinearLayout) getActivity().findViewById(R.id._ly_filtro);
                 _ly_filtros.removeAllViews();
                 _lv_filtro = new _lv_Cata[nFil];
 
                 for (int i = 0; i < nFil; i++) {
+
                     adiciona_boton(_ly_filtros, i, lv_param, "F", a_Filtros);
                     adiciona_filtro(aFilDat[i], i);
                 }
@@ -783,7 +786,7 @@ public class ConfiguracionFragment extends Fragment {
 
         String[] aValores = cValores.split("-");
         //Log.i("Catalogo Filtros",cValores+" "+aValores[2]+" "+aValores[0]+" "+aValores[1]);
-        ArrayList<String> aCat = Trae_Cves(aValores[2], aValores[0], aValores[1], observatorio.getAnio());
+        ArrayList<c_filtro> aCat = Trae_Cves(aValores[2], aValores[0], aValores[1], observatorio.getAnio()); // MVP_1_0
         _ly_Cata = (LinearLayout) getActivity().findViewById(R.id._ly_cata);
 
 
@@ -792,6 +795,7 @@ public class ConfiguracionFragment extends Fragment {
         _ly_Cata.addView((View) _lv_filtro[pos]._lv, pos);
         _lv_filtro[pos]._lv.setBackgroundColor(Color.WHITE);
         _lv_filtro[pos]._lv.setVisibility(View.GONE);
+        _lv_filtro[pos]._lv.setVisibility(View.INVISIBLE);
 
 
         LayoutInflater _ly_infla = LayoutInflater.from(g_contexto);
@@ -802,12 +806,13 @@ public class ConfiguracionFragment extends Fragment {
 
     }
 
-
-    public ArrayList<String> Trae_Cves(String v_Tabla, String v_Campo, String v_Descripcion, String cAnio) {
+    // MVP_1_0
+    public ArrayList<c_filtro> Trae_Cves(String v_Tabla, String v_Campo, String v_Descripcion, String cAnio) {
         int nVal = 0;
         String cCampo, cDescripcion;
         String cPar;
-        ArrayList<String> a_Cves = new ArrayList<String>();
+        // ArrayList<String> a_Cves = new ArrayList<String>();      // MVP_1_0
+        ArrayList<c_filtro> a_cFiltros = new ArrayList<c_filtro>(); // MVP_1_0
         String cSql = "?sql=select-" + v_Campo + "," + v_Descripcion + "-from-" + v_Tabla + "-where-anio='" + cAnio + "'-order-by-" + v_Campo;
         cPar = "?tableMain=noimporta" +
                 "&tableCatalog=" + v_Tabla +
@@ -831,7 +836,9 @@ public class ConfiguracionFragment extends Fragment {
                     JSONObject obj = new JSONObject(data_array.get(i).toString());
                     cCampo = (obj.getString(v_Campo));
                     cDescripcion = (obj.getString(v_Descripcion));
-                    a_Cves.add(cCampo + "-" + cDescripcion);
+                    c_filtro v_filtro = new c_filtro(cCampo, cDescripcion, false);  // MVP_1_0
+                    //a_Cves.add(cCampo + "-" + cDescripcion);                      // MVP_1_0
+                    a_cFiltros.add(v_filtro);                                       // MVP_1_0
                 }
 
 
@@ -842,7 +849,7 @@ public class ConfiguracionFragment extends Fragment {
         } else {
             Toast.makeText(g_contexto, "Regresa falso " + cSql, Toast.LENGTH_SHORT).show();
         }
-        return a_Cves;
+        return a_cFiltros;                                                          // MVP_1_0;
     }
 
 
@@ -997,7 +1004,7 @@ public class ConfiguracionFragment extends Fragment {
 
     // ==========================================================================================================
     public void oculta_filtro_visible() {
-        if (_ly_Cata != null) {                 // c_mab_1
+        if (_ly_Cata != null) {                 // c_mabg_27_abr_2017
             _ly_Cata.setVisibility(View.GONE);
         }
         if (nCatalogo_Visible > 0) {
@@ -1009,60 +1016,97 @@ public class ConfiguracionFragment extends Fragment {
         }
     }
 
+    // MVP_1_0 =====================================================================================
     public String trae_filtros() {
 
-        String cFiltro = "", cValor, cCampo, cW;
+        String cFiltro = "", cValor, cCampo = "", cW;
         _lv_Cata _lv_;
         ListView _lvw_;
-        //_lv_filtro[pos]._lv
+
         for (int i = 0; i < _lv_filtro.length; i++) {
             cW = "";
             _lvw_ = _lv_filtro[i]._lv;
             _lv_ = _lv_filtro[i];
-            if (_lvw_.getCheckedItemCount() > 0) {
-                cCampo = aFilDat[i];
-                cCampo = cCampo.substring(0, cCampo.indexOf('-'));
-                Log.e("!!!!! Filtro " + i, "Numero=" + _lvw_.getCheckedItemCount() + " " + cCampo);
-                SparseBooleanArray sp = _lvw_.getCheckedItemPositions();
-                //sp.clear(); NOOOOOOOOOOOO
-
-                Log.i("Elegidos ", ":" + sp.size());
-                //Log.i("Long"," "+_lvw_.getCheckedItemCount());
-                cW = "";
-                cValor = "";
-                for (int j = 0; j < sp.size(); j++) {
-                    //for (int j=0; j<= _lvw_.getCheckedItemCount() ; j++ ){
-                    //Log.e("filtro " + j, "Valor " + _lvw_.getItemAtPosition(sp.keyAt(j)).toString()+ " " + _lvw_.isItemChecked(sp.keyAt(j)) );
-                    int posicion = sp.keyAt(j);
-                    //Log.e("Posicion="," "+posicion+" "+sp.valueAt(j)+" "+_lv_.a_Cat.get(posicion));
-                    //if ( sp.get(sp.keyAt(j))) {
-                    //if ( _lvw_.isItemChecked(sp.keyAt(j)) ) {
-                    if (sp.valueAt(j)) {
-
-                        //Log.e("Selecciono "+j,"Valor:"+_lvw_.getItemAtPosition(sp.keyAt(j)).toString());
-                        //Log.e("filtro " + j , "Valor " + _lv_.a_Cat.get(sp.keyAt(j)));
-
-                        cValor = _lv_.a_Cat.get(posicion);
-                        cValor = cValor.substring(0, cValor.indexOf('-'));
+            cCampo = aFilDat[i];
+            cCampo = cCampo.substring(0, cCampo.indexOf('-'));
+            // Log.e(" " + cCampo, "[" + _lv_.ad_Cat.numSel + "]");
+            if (_lv_.ad_Cat.numSel > 0) {
+                for (int j = 0; j < _lv_.ad_Cat.getCount(); j++) {
+                    if (_lv_.ad_Cat.getItem(j).estaSeleccionado()) {
+                        cValor = _lv_.cValor(j);
                         cValor = "'" + cValor + "'";
                         if (cW == "") {
                             cW = cValor;
                         } else {
                             cW = cW + "," + cValor;
                         }
-
-                        // Log.i("     Selecciono " + j, "Valor " + cValor); // c_mabg_1
-
                     }
                 }
-                // &filtro1=proyecto&valorFiltro1='B000000'&filtro2=unidad&valorFiltro2='OF16'
+            }
+            if (cW != "") {
                 cFiltro = cFiltro + "&filtro" + (i + 1) + "=" + cCampo + "&valorFiltro" + (i + 1) + "=" + cW;
             }
-
         }
-        // Log.e("                *****", "***** cFiltro = " + cFiltro); // c_mabg_1
+        //Log.e("                *****", "***** cFiltro = " + cFiltro);
         return cFiltro;
+
     }
+    // MVP_1_0 =====================================================================================
+
+//    public String trae_filtros() {
+//
+//        String cFiltro = "", cValor, cCampo, cW;
+//        _lv_Cata _lv_;
+//        ListView _lvw_;
+//        //_lv_filtro[pos]._lv
+//        for (int i = 0; i < _lv_filtro.length; i++) {
+//            cW = "";
+//            _lvw_ = _lv_filtro[i]._lv;
+//            _lv_ = _lv_filtro[i];
+//            if (_lvw_.getCheckedItemCount() > 0) {
+//                cCampo = aFilDat[i];
+//                cCampo = cCampo.substring(0, cCampo.indexOf('-'));
+//                Log.e("!!!!! Filtro " + i, "Numero=" + _lvw_.getCheckedItemCount() + " " + cCampo);
+//                SparseBooleanArray sp = _lvw_.getCheckedItemPositions();
+//                //sp.clear(); NOOOOOOOOOOOO
+//
+//                Log.i("Elegidos ", ":" + sp.size());
+//                //Log.i("Long"," "+_lvw_.getCheckedItemCount());
+//                cW = "";
+//                cValor = "";
+//                for (int j = 0; j < sp.size(); j++) {
+//                    //for (int j=0; j<= _lvw_.getCheckedItemCount() ; j++ ){
+//                    //Log.e("filtro " + j, "Valor " + _lvw_.getItemAtPosition(sp.keyAt(j)).toString()+ " " + _lvw_.isItemChecked(sp.keyAt(j)) );
+//                    int posicion = sp.keyAt(j);
+//                    //Log.e("Posicion="," "+posicion+" "+sp.valueAt(j)+" "+_lv_.a_Cat.get(posicion));
+//                    //if ( sp.get(sp.keyAt(j))) {
+//                    //if ( _lvw_.isItemChecked(sp.keyAt(j)) ) {
+//                    if (sp.valueAt(j)) {
+//
+//                        //Log.e("Selecciono "+j,"Valor:"+_lvw_.getItemAtPosition(sp.keyAt(j)).toString());
+//                        //Log.e("filtro " + j , "Valor " + _lv_.a_Cat.get(sp.keyAt(j)));
+//
+//                        cValor = _lv_.a_Cat.get(posicion);
+//                        cValor = cValor.substring(0, cValor.indexOf('-'));
+//                        cValor = "'" + cValor + "'";
+//                        if (cW == "") {
+//                            cW = cValor;
+//                        } else {
+//                            cW = cW + "," + cValor;
+//                        }
+//
+//                        // Log.i("     Selecciono " + j, "Valor " + cValor); // c_mabg_1
+//
+//                    }
+//                }
+//                // &filtro1=proyecto&valorFiltro1='B000000'&filtro2=unidad&valorFiltro2='OF16'
+//                cFiltro = cFiltro + "&filtro" + (i + 1) + "=" + cCampo + "&valorFiltro" + (i + 1) + "=" + cW;
+//            }
+//
+//        }
+//        // Log.e("                *****", "***** cFiltro = " + cFiltro); // c_mabg_1
+//        return cFiltro;
+//    }
 
     // ============================================================= c_mabg_1
     public void guarda_cuadricula() {   // C_mabg_1
@@ -1144,4 +1188,13 @@ public class ConfiguracionFragment extends Fragment {
         Toast.makeText(getActivity(), "metodo2", Toast.LENGTH_SHORT).show();
     }
 
+
+    public  void  cierra_catalogo(){
+        //      Toast.makeText( g_contexto,"Boton :" + btn.getTag() ,Toast.LENGTH_LONG).show();
+        _ly_Cata.setVisibility(View.GONE);
+        if (_ly_tbl != null) {
+            _ly_tbl.setVisibility(View.VISIBLE);
+        }
+        //_lv_filtro[(int)btn.getTag()]._lv.setVisibility(View.GONE);
+    }
 }

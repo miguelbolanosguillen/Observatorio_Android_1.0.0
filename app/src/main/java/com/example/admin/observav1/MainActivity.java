@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
@@ -18,6 +19,8 @@ import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import static com.example.admin.observav1.ConfiguracionFragment._btn_rep;
 
 public class MainActivity extends AppCompatActivity implements MiComunicacion{
+
+
     private static final String SELECTED_ITEM = "arg_selected_item";
     private BottomNavigationView mBottomNav;
     private int mSelectedItem;
@@ -223,5 +226,8 @@ public class MainActivity extends AppCompatActivity implements MiComunicacion{
             return detf;
     }
 
-
+    public void cierra_filtro(View btn) {
+        ConfiguracionFragment cf = new ConfiguracionFragment();
+        cf.cierra_catalogo();
+    }
 }

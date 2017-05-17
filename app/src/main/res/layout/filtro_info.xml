@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="6dip">
+
+    <CheckBox
+        android:id="@+id/cb_seleccionado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:text="Clave"
+        android:textSize="8sp" />
+
+    <TextView
+        android:id="@+id/tv_descripcion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/cb_seleccionado"
+        android:layout_alignBottom="@+id/cb_seleccionado"
+        android:layout_toRightOf="@+id/cb_seleccionado"
+        android:text="Descripción"
+        android:textSize="8sp" />
+
+</RelativeLayout>

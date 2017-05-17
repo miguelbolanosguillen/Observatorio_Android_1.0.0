@@ -12,19 +12,18 @@ import android.widget.ListView;
 
 public class sel_filtro  {
 
-    public LinearLayout _ly_filtro,_ly_Cata;
+    public LinearLayout _ly_filtro;
     public int  _id;
     //public SearchView _sv;
     private ListView lista;
     Button _btn;
-    public _lv_Cata filtro;
+    public _lv_Cata filtros;
 
 
-    public sel_filtro(View v , int nPos, ListView lista , _lv_Cata filtro ){
+    public sel_filtro(View v , int nPos, ListView lista , _lv_Cata filtros ){
         this.lista = lista;
-        this.filtro = filtro;
+        this.filtros = filtros;
         _ly_filtro  = (LinearLayout)v.findViewById(R.id._sel_filtro);
-
         _ly_filtro.setId(nPos);
         _btn        = (Button)v.findViewById(R.id._btn_sel12345);
         //_sv         = (SearchView)(v.findViewById(R.id._sv_));
