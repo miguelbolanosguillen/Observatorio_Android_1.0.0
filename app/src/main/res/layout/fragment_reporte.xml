@@ -43,7 +43,7 @@
                     android:id="@+id/_lly_reportes"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="4"
+                    android:layout_weight="5"
                     android:orientation="horizontal">
 
                     <HorizontalScrollView
@@ -105,7 +105,7 @@
                     android:id="@+id/_lly_filtros"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="4"
+                    android:layout_weight="5"
                     android:orientation="horizontal">
 
                     <HorizontalScrollView
@@ -165,7 +165,7 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="4">
+                    android:layout_weight="5">
 
                     <HorizontalScrollView
                         android:layout_width="wrap_content"
