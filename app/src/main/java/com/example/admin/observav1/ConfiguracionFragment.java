@@ -93,6 +93,7 @@ import static com.example.admin.observav1.MainActivity.l_EdoEjer;
 
     LinearLayout linerlista;
     MenuItem fav;
+    static boolean interceptScroll=true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -217,7 +218,7 @@ import static com.example.admin.observav1.MainActivity.l_EdoEjer;
             }
         });
 
-        lv_respo = (ListView) getActivity().findViewById(R.id.listViewResponsabilidades);
+        //lv_respo = (ListView) getActivity().findViewById(R.id.listViewResponsabilidades);
         _tv_rol = (TextView) getActivity().findViewById(R.id._textRol);
         lv_respo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -269,7 +270,7 @@ import static com.example.admin.observav1.MainActivity.l_EdoEjer;
                                         "&anio=" + observatorio.getPeriodo();
 
                                 //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-                                View v_tbl = LayoutInflater.from(getActivity()).inflate(R.layout.tbl_consulta, null);
+                                View v_tbl = LayoutInflater.from(g_contexto).inflate(R.layout.tbl_consulta, null);
                                 _ly_tbl.addView(v_tbl);
 // ===================================================================================================================
 // ===================================================================================================================
@@ -278,10 +279,16 @@ import static com.example.admin.observav1.MainActivity.l_EdoEjer;
                                 scrollView1.setScrollViewListener(new ScrollViewListener() {
                                     @Override
                                     public void onScrollChanged(ObservableScrollView scrollView, int x, int y, int oldx, int oldy) {
-                                        if (scrollView == scrollView1) {
+                                        /*if (scrollView == scrollView1) {
                                             scrollView2.scrollTo(x, y);
                                         } else if (scrollView == scrollView2) {
                                             scrollView1.scrollTo(x, y);
+                                        }*/
+                                        if(interceptScroll) {
+                                            if (scrollView==scrollView1)
+                                                scrollView2.onOverScrolled(x,y,true,true);
+                                            else if (scrollView==scrollView2)
+                                                scrollView1.onOverScrolled(x,y,true,true);
                                         }
 
                                     }
@@ -290,10 +297,16 @@ import static com.example.admin.observav1.MainActivity.l_EdoEjer;
                                 scrollView2.setScrollViewListener(new ScrollViewListener() {
                                     @Override
                                     public void onScrollChanged(ObservableScrollView scrollView, int x, int y, int oldx, int oldy) {
-                                        if (scrollView == scrollView1) {
+                                        /*if (scrollView == scrollView1) {
                                             scrollView2.scrollTo(x, y);
                                         } else if (scrollView == scrollView2) {
                                             scrollView1.scrollTo(x, y);
+                                        }*/
+                                        if(interceptScroll) {
+                                            if (scrollView==scrollView1)
+                                                scrollView2.onOverScrolled(x,y,true,true);
+                                            else if (scrollView==scrollView2)
+                                                scrollView1.onOverScrolled(x,y,true,true);
                                         }
 
                                     }
@@ -377,7 +390,6 @@ import static com.example.admin.observav1.MainActivity.l_EdoEjer;
                                         }
                                         guarda_cuadricula();    // C_mabg_1
                                         oculta_filtro_visible();
-                                        //this.lv_respo.setAdapter(new ArrayAdapter(this,R.layout.responsabilidades_item,a_responsa));
                                         Toast.makeText(getActivity(), "Termino consulta..", Toast.LENGTH_SHORT).show();
                                     } catch (JSONException e) {
                                         //Log.e("***","=====================================================================\n");
@@ -599,7 +611,7 @@ import static com.example.admin.observav1.MainActivity.l_EdoEjer;
             btn_.setTextColor(Color.BLACK);
             if (nPos == i) {
                 //btn_.setTextColor(Color.rgb(233, 7, 188));
-                btn_.setTextColor(Color.rgb(233, 7, 188));
+                btn_.setTextColor(getResources().getColor(R.color.colorAccent));
                 //btn_.setTextColor(getResources().getColor(R.color.rojote,getTheme()));
             }
         }
@@ -756,7 +768,7 @@ import static com.example.admin.observav1.MainActivity.l_EdoEjer;
                 _lv_filtro[nPos]._lv.setVisibility(View.VISIBLE);
                 _lv_filtro[nPos]._lv.bringToFront();
                 // Log.i("Filtro (" + i + ")= Ln ", _lv_filtro.length + "  br=" + _btn_rep.length + " ba=" + _btn_agrupa.length + "  i=" + i + " Id:" + btn_.getId()); // c_mabg_1
-                btn_.setTextColor(Color.RED);
+                btn_.setTextColor(getResources().getColor(R.color.colorAccent));
                 nCatalogo_Visible = nPos;
                 _sel_filtro[i]._ly_filtro.setVisibility(View.VISIBLE);
             }
@@ -773,7 +785,7 @@ import static com.example.admin.observav1.MainActivity.l_EdoEjer;
             btn_ = (Button) getActivity().findViewById(i + _btn_rep.length); // + _btn_filtro.length);
             btn_.setTextColor(Color.BLACK);
             if (nPos == i) {
-                btn_.setTextColor(Color.rgb(213, 0, 127));
+                btn_.setTextColor(getResources().getColor(R.color.colorAccent));
 
 
             }
