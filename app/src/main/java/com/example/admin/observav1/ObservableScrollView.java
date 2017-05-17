@@ -24,6 +24,11 @@ public class ObservableScrollView extends ScrollView {
         super(context, attrs, defStyle);
     }
 
+    //metodo para controlar  el scrollView
+    public void onOverScrolled(int scrollX, int scrollY, boolean clampedX, boolean clampedY) {
+        super.onOverScrolled(scrollX, scrollY, clampedX, clampedY);
+    }
+
     public ObservableScrollView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
