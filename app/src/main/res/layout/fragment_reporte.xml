@@ -14,12 +14,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="0dp"
+            android:layout_marginTop="1dp"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="25dp"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -43,8 +43,10 @@
                     android:id="@+id/_lly_reportes"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="5"
-                    android:orientation="horizontal">
+                    android:layout_margin="1dp"
+                    android:layout_weight="4"
+                    android:orientation="horizontal"
+                    android:padding="0dp">
 
                     <HorizontalScrollView
                         android:id="@+id/_sv_reportes"
@@ -66,6 +68,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:gravity="center"
                     android:orientation="vertical">
 
                     <TextView
@@ -73,7 +76,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
-                        android:text="fecha" />
+                        android:text="fecha"
+                        android:textSize="11dp"/>
 
                 </LinearLayout>
 
@@ -81,7 +85,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="25dp"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -105,8 +109,10 @@
                     android:id="@+id/_lly_filtros"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="5"
-                    android:orientation="horizontal">
+                    android:layout_margin="1dp"
+                    android:layout_weight="4"
+                    android:orientation="horizontal"
+                    android:padding="0dp">
 
                     <HorizontalScrollView
                         android:id="@+id/_sv_filtro"
@@ -132,17 +138,19 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="right"
-                        android:text="Ningun filtro Ati" />
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:text="Ningun filtro"
+                        android:textSize="11dp" />
                 </LinearLayout>
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="25dp"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -165,7 +173,8 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="5">
+                    android:layout_weight="4"
+                    android:padding="0dp">
 
                     <HorizontalScrollView
                         android:layout_width="wrap_content"
@@ -187,6 +196,7 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="2dp"
                     android:layout_weight="1"
                     android:orientation="vertical">
 

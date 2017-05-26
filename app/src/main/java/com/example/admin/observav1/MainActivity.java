@@ -12,24 +12,27 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import static com.example.admin.observav1.ConfiguracionFragment._btn_rep;
+import static com.example.admin.observav1.ConfiguracionFragment.l_Entrada;
+import static com.example.admin.observav1.ConfiguracionFragment.l_Responsabilidad;
 
-public class MainActivity extends AppCompatActivity implements MiComunicacion{
+public class MainActivity extends AppCompatActivity implements MiComunicacion {
 
 
     private static final String SELECTED_ITEM = "arg_selected_item";
     private BottomNavigationView mBottomNav;
     private int mSelectedItem;
     private Toolbar appbar;
-    public static boolean l_EdoEjer=true;     // c_mabg1
-    Fragment finf,fconf,frepo,detf;
+    public static boolean l_EdoEjer = true;     // c_mabg1
+    Fragment finf, fconf, frepo, detf;
     FloatingActionButton fabGrafica;
     FloatingActionsMenu famb;
-    String pro="";
+    String pro = "";
     public static Context g_contexto;
 
 
@@ -38,17 +41,17 @@ public class MainActivity extends AppCompatActivity implements MiComunicacion{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        agrgarFragmentos();
+        agregarFragmentos();
         ocultarFragmentos();
 
-        fabGrafica=(FloatingActionButton)findViewById(R.id.accion_grafica);
-        famb=(FloatingActionsMenu)findViewById(R.id.menu_fab);
+        fabGrafica = (FloatingActionButton) findViewById(R.id.accion_grafica);
+        famb = (FloatingActionsMenu) findViewById(R.id.menu_fab);
 
 
-        appbar = (Toolbar)findViewById(R.id.appbar);
+        appbar = (Toolbar) findViewById(R.id.appbar);
         setSupportActionBar(appbar);
 
-        mBottomNav = (BottomNavigationView)getWindow().findViewById(R.id.navigation11);
+        mBottomNav = (BottomNavigationView) getWindow().findViewById(R.id.navigation11);
         mBottomNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -75,8 +78,6 @@ public class MainActivity extends AppCompatActivity implements MiComunicacion{
                 startActivity(i);
             }
         });
-
-
 
 
     }
@@ -129,12 +130,23 @@ public class MainActivity extends AppCompatActivity implements MiComunicacion{
 
         switch (item.getItemId()) {
             case R.id.menu_reporte:
-                //muetraBotonesFlotante();
-                ocultarFragmentos();
-                muestraFragmento(frepo);
-                if ( l_EdoEjer ) {                  // c_mabg_1
-                    _btn_rep[0].performClick();
-                    l_EdoEjer = false;
+                if (l_Responsabilidad && l_Entrada ) {
+                    //muetraBotonesFlotante();
+                    ocultarFragmentos();
+                    muestraFragmento(frepo);
+                    if (l_EdoEjer) {                  // c_mabg_1
+                        _btn_rep[0].performClick();
+                        l_EdoEjer = false;
+                    }
+                } else {
+                    String cMensaje="";
+                    if ( !l_Entrada ){
+                        cMensaje = "Intruduzca usuario. ";
+                    }
+                    if ( !l_Responsabilidad){
+                        cMensaje = cMensaje + "Seleccione responsabilidad.";
+                    }
+                    Toast.makeText(this, cMensaje, Toast.LENGTH_SHORT).show();
                 }
                 break;
 
@@ -150,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements MiComunicacion{
                     ocultaBotonesFlotante();
                     ocultarFragmentos();
                     muestraFragmento(fconf);
-                }else {
+                } else {
                     ocultaBotonesFlotante();
                     ocultarFragmentos();
                     muestraFragmento(detf);
@@ -163,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements MiComunicacion{
         mSelectedItem = item.getItemId();
 
         // uncheck the other items.
-        for (int i = 0; i< mBottomNav.getMenu().size(); i++) {
+        for (int i = 0; i < mBottomNav.getMenu().size(); i++) {
             MenuItem menuItem = mBottomNav.getMenu().getItem(i);
             menuItem.setChecked(menuItem.getItemId() == item.getItemId());
         }
@@ -172,25 +184,26 @@ public class MainActivity extends AppCompatActivity implements MiComunicacion{
     }
 
     private void updateToolbarText(CharSequence text) {
-        if ( appbar != null) {
+        if (appbar != null) {
             appbar.setTitle(text);
         }
     }
 
-    public void agrgarFragmentos(){
+    public void agregarFragmentos() {
         finf = new InformeFragment();
         fconf = new ConfiguracionFragment();
         frepo = new ReporteFragment();
         detf = new DetalleSesionFragment();
         FragmentTransaction ftagregar = getSupportFragmentManager().beginTransaction();
         ftagregar.add(R.id.container, finf, finf.getTag());
-        ftagregar.add(R.id.container, fconf,fconf.getTag());
-        ftagregar.add(R.id.container, frepo,frepo.getTag());
-        ftagregar.add(R.id.container, detf,detf.getTag());
+        ftagregar.add(R.id.container, fconf, fconf.getTag());
+        ftagregar.add(R.id.container, frepo, frepo.getTag());
+        ftagregar.add(R.id.container, detf, detf.getTag());
         ftagregar.commit();
-        
+
     }
-    public void ocultarFragmentos(){
+
+    public void ocultarFragmentos() {
 
         FragmentTransaction ftocultar = getSupportFragmentManager().beginTransaction();
         ftocultar.hide(finf);
@@ -200,34 +213,34 @@ public class MainActivity extends AppCompatActivity implements MiComunicacion{
         ftocultar.commit();
 
     }
-    public void muestraFragmento(Fragment f1){
+
+    public void muestraFragmento(Fragment f1) {
         FragmentTransaction ftm = getSupportFragmentManager().beginTransaction();
         ftm.show(f1);
         ftm.commit();
 
     }
-    public void ocultaBotonesFlotante(){
+
+    public void ocultaBotonesFlotante() {
         famb.setVisibility(View.GONE);
     }
-    public void muetraBotonesFlotante(){
-       famb.setVisibility(View.VISIBLE);
+
+    public void muetraBotonesFlotante() {
+        famb.setVisibility(View.VISIBLE);
     }
 
 
     @Override
     public void miRespuesta(String data) {
-       pro=data;
+        pro = data;
     }
 
-    public Fragment retornaFra(int opc){
-        if (opc==1)
+    public Fragment retornaFra(int opc) {
+        if (opc == 1)
             return fconf;
         else
             return detf;
     }
 
-    public void cierra_filtro(View btn) {
-        ConfiguracionFragment cf = new ConfiguracionFragment();
-        cf.cierra_catalogo();
-    }
+
 }
