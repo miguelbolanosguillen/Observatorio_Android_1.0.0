@@ -25,6 +25,7 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -51,6 +52,7 @@ public class ConfiguracionFragment extends Fragment {
     ListView lv_respo;
     String v_Responsa;
     TextView _tv_rol, otxt_fecha;
+    Spinner oSpin_Fecha;
 
     public String[] a_reportes = new String[10];
     public String[] idReportGe = new String[10];
@@ -92,10 +94,13 @@ public class ConfiguracionFragment extends Fragment {
     private sel_filtro[] _sel_filtro;
     static public Boolean l_Entrada = false;
     static boolean l_Responsabilidad = false;
+    boolean l_Agrupa = false;
 
     LinearLayout linerlista;
     MenuItem fav;
     static boolean interceptScroll = true;
+
+    String[] aFechas ; // Aqui se guardara la fecha del reporte
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -153,6 +158,7 @@ public class ConfiguracionFragment extends Fragment {
         g_usr = (EditText) getActivity().findViewById(R.id.oet_Usuario);
         g_cve = (EditText) getActivity().findViewById(R.id.oet_Clave);
         otxt_fecha = (TextView) getActivity().findViewById(R.id.txt_consulta);
+        oSpin_Fecha = (Spinner) getActivity().findViewById(R.id.spin_fecha);
         _ly_agrupa = (LinearLayout) getActivity().findViewById(R.id._ly_agrupa);
         _ly_filtros = (LinearLayout) getActivity().findViewById(R.id._ly_filtro);
         _ly_tbl = (LinearLayout) getActivity().findViewById(R.id.tbl_Consulta);
@@ -460,11 +466,12 @@ public class ConfiguracionFragment extends Fragment {
                 _ly_tbl.removeAllViews();
                 lv_respo.setVisibility(View.GONE);
                 lv_respo.setVisibility(View.INVISIBLE);
-
+//              observatorio viene de la clase c_valor
                 observatorio.setFecha("");
                 observatorio.setAnio("");
                 observatorio.setPeriodo("");
                 otxt_fecha.setText("Fecha");
+
 
                 MainActivity act1 = (MainActivity) getActivity();
                 act1.ocultarFragmentos();
@@ -520,7 +527,7 @@ public class ConfiguracionFragment extends Fragment {
         }
         //Toast.makeText(g_contexto,cSql,Toast.LENGTH_SHORT).show();
     }
-
+// ==============================================================================================================
     public void adiciona_boton(LinearLayout _ly, int pos, LinearLayout.LayoutParams lv_param,
                                final String cFiltro, String[] aTitulo) {
         Button btn_;
@@ -546,7 +553,7 @@ public class ConfiguracionFragment extends Fragment {
             case "F": {
                 //Log.v("Rep long=",Integer.toString(_btn_rep.length));
                 //Log.v("Rep long=",Integer.toString(_btn_filtro.length));
-                nPos = pos + _btn_rep.length + _btn_filtro.length;
+                nPos = pos + _btn_rep.length + _btn_agrupa.length;  //  _btn_filtro.length;
                 break;
             }
         }
@@ -688,8 +695,12 @@ public class ConfiguracionFragment extends Fragment {
                 observatorio.setAnio(cAnio);
                 observatorio.setPeriodo(cPeriodo);
                 if (cFecha != "") {
-
+                    // Asigno la última fecha al textView
                     otxt_fecha.setText(cFecha);
+                    aFechas = new String[1];
+                    aFechas[0] = cFecha;
+                    oSpin_Fecha.setAdapter(new ArrayAdapter<String>(g_contexto,R.layout.spinner_item,aFechas));
+
                 }
             } catch (JSONException e) {
                 //e.printStackTrace();
@@ -772,12 +783,13 @@ public class ConfiguracionFragment extends Fragment {
         for (int i = 0; i < _lv_filtro.length; i++) {
 
             btn_ = (Button) getActivity().findViewById(i + _btn_rep.length + _btn_agrupa.length);
+//          Log.i("Filtro (" + i + ")= Ln ", _lv_filtro.length + "  br=" + _btn_rep.length + " ba=" + _btn_agrupa.length + "  i=" + i + " Id:" + btn_.getId()+ " nPos=" + nPos); // c_mabg_1
             btn_.setTextColor(Color.BLACK);
             if (nPos == i) {
                 _ly_Cata.setVisibility(View.VISIBLE);
                 _lv_filtro[nPos]._lv.setVisibility(View.VISIBLE);
                 _lv_filtro[nPos]._lv.bringToFront();
-                // Log.i("Filtro (" + i + ")= Ln ", _lv_filtro.length + "  br=" + _btn_rep.length + " ba=" + _btn_agrupa.length + "  i=" + i + " Id:" + btn_.getId()); // c_mabg_1
+                Log.i("nPos=",nPos+" i="+i);
                 btn_.setTextColor(getResources().getColor(R.color.colorAccent));
                 nCatalogo_Visible = nPos;
                 _sel_filtro[i]._ly_filtro.setVisibility(View.VISIBLE);
@@ -788,6 +800,7 @@ public class ConfiguracionFragment extends Fragment {
     //  ==============================================================================
     public void boton_agrupa_click(View btn) {
         Button btn_;
+        l_Agrupa = false;
         int nPos = btn.getId() - _btn_rep.length;  // - _btn_filtro.length;
         g_agrupa = a_Agrupa_Campo[nPos];// Guarda el campo de agrupación
         // Toast.makeText(getActivity(),"Agrupa "+g_agrupa,Toast.LENGTH_SHORT).show(); // c_mabg_1
@@ -795,6 +808,7 @@ public class ConfiguracionFragment extends Fragment {
             btn_ = (Button) getActivity().findViewById(i + _btn_rep.length); // + _btn_filtro.length);
             btn_.setTextColor(Color.BLACK);
             if (nPos == i) {
+                l_Agrupa = true;
                 btn_.setTextColor(getResources().getColor(R.color.colorAccent));
 
 
