@@ -4,9 +4,9 @@ import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -44,7 +44,7 @@ import static com.example.admin.observav1.MainActivity.g_contexto;
 import static com.example.admin.observav1.MainActivity.l_EdoEjer;
 
 public class ConfiguracionFragment extends Fragment {
-    Button botonSe2, botonCancelar, botonCerrarSesion, boton_sel1;
+    Button botonSe2, botonCancelar, botonCerrarSesion, btn_ant, btn_sig;
     EditText g_usr, g_cve;
     public c_php_jason o_ldap = new c_php_jason();
     public c_usuario o_usuario;
@@ -63,8 +63,8 @@ public class ConfiguracionFragment extends Fragment {
     public int n_Col = -1;
     public int n_Ren = -1;
     private int it = -1, iConta = -1;
-    public String[][][] v_tabla = new String[30][][]; // 30 reportes, n_Columnas , n_Renglones
-    private String[] v_Col;
+    public String[][][] v_tabla = new String[30][][];   // 30 reportes, n_Columnas , n_Renglones
+    private int[][] v_Col_Ren = new int[30][2];         // Guarda el numero de columnas y de renglones de cada consulta
     private String[][] v_Ren;
 
     public static Button[] _btn_rep;
@@ -100,7 +100,8 @@ public class ConfiguracionFragment extends Fragment {
     MenuItem fav;
     static boolean interceptScroll = true;
 
-    String[] aFechas ; // Aqui se guardara la fecha del reporte
+    String[] aFechas; // Aqui se guardara la fecha del reporte
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -109,6 +110,7 @@ public class ConfiguracionFragment extends Fragment {
         lv_param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
         setHasOptionsMenu(true);
+
         /*Button menuboton =(Button)getActivity().findViewById(R.id.action_buscar);
         menuboton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,12 +118,14 @@ public class ConfiguracionFragment extends Fragment {
                 Toast.makeText(getActivity(), "prueba 124", Toast.LENGTH_SHORT).show();
             }
         });*/
+
+//
         return inflater.inflate(R.layout.fragment_configuracion, container, false);
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-
+        Toast.makeText(getActivity(), "Entro a menu", Toast.LENGTH_SHORT).show();
         // TODO Add your menu entries here
         inflater.inflate(R.menu.menu_appbar, menu);
         super.onCreateOptionsMenu(menu, inflater);
@@ -153,6 +157,8 @@ public class ConfiguracionFragment extends Fragment {
         StrictMode.setThreadPolicy(policy);
         botonCancelar = (Button) getActivity().findViewById(R.id.botonCancelar1);
         botonCerrarSesion = (Button) getActivity().findViewById(R.id.botomCS);
+        btn_ant = (Button) getActivity().findViewById(R.id.btn_ant);
+        btn_sig = (Button) getActivity().findViewById(R.id.btn_sig);
 
         lv_respo = (ListView) getActivity().findViewById(R.id.listViewResponsabilidades);
         g_usr = (EditText) getActivity().findViewById(R.id.oet_Usuario);
@@ -284,7 +290,7 @@ public class ConfiguracionFragment extends Fragment {
                                             "&anio=" + observatorio.getPeriodo();
 
                                     //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-                                    View v_tbl = LayoutInflater.from(g_contexto).inflate(R.layout.tbl_consulta,null);
+                                    View v_tbl = LayoutInflater.from(g_contexto).inflate(R.layout.tbl_consulta, null);
                                     _ly_tbl.addView(v_tbl);
 // ===================================================================================================================
 // ===================================================================================================================
@@ -338,10 +344,12 @@ public class ConfiguracionFragment extends Fragment {
                                     if (o_ldap.m_php_jason("genera_consultaResp.php", cPar)) {
 
                                         try {
-                                            TableLayout _tab_C, _tab_D;
-                                            TableLayout.LayoutParams layOutRenglon;
+                                            Boolean l_JSon = true;
 
                                             a_Cam_Json[0] = g_agrupa;
+
+                                            TableLayout _tab_C, _tab_D;
+                                            TableLayout.LayoutParams layOutRenglon;
 
                                             _tab_C = (TableLayout) getActivity().findViewById(R.id._TablaC);
                                             _tab_D = (TableLayout) getActivity().findViewById(R.id._TablaD);
@@ -393,7 +401,7 @@ public class ConfiguracionFragment extends Fragment {
                                                         }
                                                         fila_D.addView(texto);
                                                     }
-                                                    v_Ren[j][i] = texto.toString();     // C_mabg_1
+                                                    v_Ren[j][i] = texto.getText().toString();     // C_mabg_1
                                                 }
                                                 _tab_C.addView(fila_C);
                                                 _tab_D.addView(fila_D);
@@ -481,7 +489,19 @@ public class ConfiguracionFragment extends Fragment {
             }
         });
 
+        btn_ant.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                anterior_consulta();
+            }
+        });
 
+        btn_sig.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                siguiente_consulta();
+            }
+        });
     }
 
 
@@ -527,7 +547,8 @@ public class ConfiguracionFragment extends Fragment {
         }
         //Toast.makeText(g_contexto,cSql,Toast.LENGTH_SHORT).show();
     }
-// ==============================================================================================================
+
+    // ==============================================================================================================
     public void adiciona_boton(LinearLayout _ly, int pos, LinearLayout.LayoutParams lv_param,
                                final String cFiltro, String[] aTitulo) {
         Button btn_;
@@ -574,7 +595,7 @@ public class ConfiguracionFragment extends Fragment {
         _ly.addView(btn_, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT / 2, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         btn1 = (Button) getActivity().findViewById(id_);
-        if (cFiltro.equals("R") ) {   // Reportes
+        if (cFiltro.equals("R")) {   // Reportes
             _btn_rep[pos] = btn1;
             //            tablas[pos].setcTabla(aVal[2]);
         } else if (cFiltro.equals("F")) { // Filtros
@@ -585,7 +606,7 @@ public class ConfiguracionFragment extends Fragment {
         final String cTxt = cVal;
         btn1.setOnClickListener(new View.OnClickListener() {
             public void onClick(final View view) {
-                if (cFiltro.equals("R") ) {
+                if (cFiltro.equals("R")) {
                     final ProgressDialog progressDialog = new ProgressDialog(getActivity(),
                             R.style.AppTheme_Dark_Dialog);
                     progressDialog.setIndeterminate(true);
@@ -618,6 +639,25 @@ public class ConfiguracionFragment extends Fragment {
         Integer nFil, nGrp = 0;
         String cSql, cW;
 //      ========================================================================= // C_mabg_1
+        it = -1;
+        iConta = -1;
+        l_Agrupa = false;
+        TableLayout _tab_w;
+
+
+        _tab_w = (TableLayout) getActivity().findViewById(R.id._TablaA);
+        if (_tab_w != null)
+            _tab_w.removeAllViews();
+        _tab_w = (TableLayout) getActivity().findViewById(R.id._TablaB);
+        if (_tab_w != null)
+            _tab_w.removeAllViews();
+        _tab_w = (TableLayout) getActivity().findViewById(R.id._TablaC);
+        if (_tab_w != null)
+            _tab_w.removeAllViews();
+        _tab_w = (TableLayout) getActivity().findViewById(R.id._TablaD);
+        if (_tab_w != null)
+            _tab_w.removeAllViews();
+//      =========================================================================
         oculta_filtro_visible();
 //      Pongo el rojo el letrero del boton que selecciono
         Button btn_;
@@ -667,7 +707,7 @@ public class ConfiguracionFragment extends Fragment {
                 Log.w("Catch JSOn", "Agrupaciones");
             }
         } else {
-            Toast.makeText(g_contexto, "Regresa falso " + cSql, Toast.LENGTH_SHORT).show();
+            Toast.makeText(g_contexto, "Inconsistencia 3 " + cSql, Toast.LENGTH_SHORT).show();
             return;
         }
 //      ********************************************************************************************
@@ -690,7 +730,7 @@ public class ConfiguracionFragment extends Fragment {
                 }
                 cFecha = cFecha.substring(15);
                 cAnio = cPeriodo.substring(4);
-                Log.e("********* cFecha=", cFecha + " cPeriodo=" + cPeriodo + " Año=" + cAnio);
+//              Log.e("********* cFecha=", cFecha + " cPeriodo=" + cPeriodo + " Año=" + cAnio);
                 observatorio.setFecha(cFecha);
                 observatorio.setAnio(cAnio);
                 observatorio.setPeriodo(cPeriodo);
@@ -699,7 +739,7 @@ public class ConfiguracionFragment extends Fragment {
                     otxt_fecha.setText(cFecha);
                     aFechas = new String[1];
                     aFechas[0] = cFecha;
-                    oSpin_Fecha.setAdapter(new ArrayAdapter<String>(g_contexto,R.layout.spinner_item,aFechas));
+                    oSpin_Fecha.setAdapter(new ArrayAdapter<String>(g_contexto, R.layout.spinner_item, aFechas));
 
                 }
             } catch (JSONException e) {
@@ -709,7 +749,7 @@ public class ConfiguracionFragment extends Fragment {
         } else {
             otxt_fecha.setText("Sin Fecha");
             Log.w("fechas:>>>", cSql);
-            Toast.makeText(g_contexto, "Regresa falso " + cSql, Toast.LENGTH_SHORT).show();
+            Toast.makeText(g_contexto, "Inconsistencia 1 " + cSql, Toast.LENGTH_SHORT).show();
         }
 // ======================================================================================================
 //      *******************************************************************************
@@ -756,7 +796,7 @@ public class ConfiguracionFragment extends Fragment {
                 Log.w("Filtros ", cSql);
             }
         } else {
-            Toast.makeText(g_contexto, "Regresa falso " + cSql, Toast.LENGTH_SHORT).show();
+            Toast.makeText(g_contexto, "Inconsistencia 4 " + cSql, Toast.LENGTH_SHORT).show();
         }
 //      *********************************************************************************************
 
@@ -789,7 +829,7 @@ public class ConfiguracionFragment extends Fragment {
                 _ly_Cata.setVisibility(View.VISIBLE);
                 _lv_filtro[nPos]._lv.setVisibility(View.VISIBLE);
                 _lv_filtro[nPos]._lv.bringToFront();
-                Log.i("nPos=",nPos+" i="+i);
+//              Log.i("nPos=", nPos + " i=" + i);
                 btn_.setTextColor(getResources().getColor(R.color.colorAccent));
                 nCatalogo_Visible = nPos;
                 _sel_filtro[i]._ly_filtro.setVisibility(View.VISIBLE);
@@ -842,6 +882,7 @@ public class ConfiguracionFragment extends Fragment {
 
     }
 
+    // ==========================================================================================================
     // MVP_1_0
     public ArrayList<c_filtro> Trae_Cves(String v_Tabla, String v_Campo, String v_Descripcion, String cAnio) {
         int nVal = 0;
@@ -883,7 +924,7 @@ public class ConfiguracionFragment extends Fragment {
                 Log.w("catch error", "JSON trae cves");
             }
         } else {
-            Toast.makeText(g_contexto, "Regresa falso " + cSql, Toast.LENGTH_SHORT).show();
+            Toast.makeText(g_contexto, "Inconsistencia 2 " + cSql, Toast.LENGTH_SHORT).show();
         }
         return a_cFiltros;                                                          // MVP_1_0;
     }
@@ -987,8 +1028,8 @@ public class ConfiguracionFragment extends Fragment {
 //              ============================================================= C_mabg_1
 
             } catch (JSONException e) {
-                e.printStackTrace();
-                // Log.w("Catch JSOn","llena_encabezados "+cSql);
+                //e.printStackTrace();
+                Log.w("Catch JSOn", "llena_encabezados " + cSql);
             }
         } else {
             Toast.makeText(getActivity(), "No hay información " + cSql, Toast.LENGTH_SHORT).show();
@@ -996,6 +1037,7 @@ public class ConfiguracionFragment extends Fragment {
 
     }
 
+    // ==========================================================================================================
     private void syncScrolls(final HorizontalScrollView currentView, final HorizontalScrollView otherView) {
 
         //This create the Gesture Listener where we override the methods we need
@@ -1029,6 +1071,7 @@ public class ConfiguracionFragment extends Fragment {
 
     }
 
+    // ==========================================================================================================
     public void cierra_filtro() {
         //Toast.makeText( g_contexto,"Boton :" + btn.getTag() ,Toast.LENGTH_LONG).show();
         _ly_Cata.setVisibility(View.GONE);
@@ -1071,7 +1114,7 @@ public class ConfiguracionFragment extends Fragment {
                     if (_lv_.ad_Cat.getItem(j).estaSeleccionado()) {
                         cValor = _lv_.cValor(j);
                         cValor = "'" + cValor + "'";
-                        if (cW.equals("") ) {
+                        if (cW.equals("")) {
                             cW = cValor;
                         } else {
                             cW = cW + "," + cValor;
@@ -1087,7 +1130,7 @@ public class ConfiguracionFragment extends Fragment {
         return cFiltro;
 
     }
-    // MVP_1_0 =====================================================================================
+//  MVP_1_0 =====================================================================================
 
 //    public String trae_filtros() {
 //
@@ -1147,6 +1190,9 @@ public class ConfiguracionFragment extends Fragment {
     // ============================================================= c_mabg_1
     public void guarda_cuadricula() {   // C_mabg_1
         it++;
+        if (it > 0) {
+            iConta = it;
+        }
         v_tabla[it] = new String[n_Col][n_Ren];     // [n_Ren + 1]; no guardo los encabezados;
 //      for (int nC = 0; nC < n_Col; nC++) {        // No guardo encabezados
 //          v_tabla[it][nC][0] = v_Col[nC];
@@ -1156,46 +1202,118 @@ public class ConfiguracionFragment extends Fragment {
                 v_tabla[it][nC][nR] = v_Ren[nC][nR];
             }
         }
+        v_Col_Ren[it][0] = n_Col;
+        v_Col_Ren[it][1] = n_Ren;
     }
 
+    // ==========================================================================================================
     public void llena_tabla(int it) {
-        TableLayout _tab_B, _tab_D;
-        int iC_tb = 0, nCol_Tb = 0;
 
-        _tab_B = (TableLayout) getActivity().findViewById(R.id._TablaB); // Detalle cve + descripción
-        _tab_D = (TableLayout) getActivity().findViewById(R.id._TablaD); // Detalle numerico
-        for (int iR = 0; iR < _tab_B.getChildCount(); iR++) {
-            View parentRow = _tab_B.getChildAt(iR);
-            if (parentRow instanceof TableRow) {
-                nCol_Tb = ((TableRow) parentRow).getChildCount();
-                for (iC_tb = 0; iC_tb < nCol_Tb; iC_tb++) {
-                    TextView txtV = (TextView) ((TableRow) parentRow).getChildAt(iC_tb);
-                    if (txtV instanceof TextView) {
-                        txtV.setText(v_tabla[it][iC_tb][iR]);
+
+//      Log.d("it_j","="+v_tabla[it][0].length+" it-j-r="+v_tabla[it][0][0].length()+" n_ren="+n_Ren+" n_Col="+n_Col);
+        TableLayout _tab_C, _tab_D;
+        TableLayout.LayoutParams layOutRenglon;
+
+        _tab_C = (TableLayout) getActivity().findViewById(R.id._TablaC);
+        _tab_D = (TableLayout) getActivity().findViewById(R.id._TablaD);
+
+        _tab_C.removeAllViews();
+        _tab_D.removeAllViews();
+
+//        JSONArray data_array = new JSONArray(o_ldap.getV_cadena_json());
+//        n_Ren = data_array.length();                    // C_mabg_1
+//        v_Ren = new String[n_Col][n_Ren];               // C_mabg_1
+        for (int i = 0; i < v_Col_Ren[it][1]; i++) {               // C_mabg_1  // Renglones
+
+            TableRow fila_C = new TableRow(getActivity());
+            TableRow fila_D = new TableRow(getActivity());
+            TableRow.LayoutParams layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
+            fila_C.setLayoutParams(layoutFila);
+            fila_D.setLayoutParams(layoutFila);
+
+            //backround para las filas del reporte
+            if ((i + 1) % 2 == 0) {
+
+            } else {
+                fila_C.setBackgroundResource(R.color.grisine);
+                fila_D.setBackgroundResource(R.color.grisine);
+            }
+
+
+//            JSONObject obj = new JSONObject(data_array.get(i).toString());
+            //Log.e("===","=====================================================================");
+            for (int j = 0; j < v_Col_Ren[it][0]; j++) {       // C_mabg_1 Columnas  a_Cam_Json
+                TextView texto = new TextView(getActivity());
+                //Log.i("v_tabla["+it+"]","["+j+"]["+i+"]="+v_tabla[it][j][i]);
+                texto.setText(v_tabla[it][j][i]);
+                texto.setWidth(a_Ancho[j]);
+                texto.setHeight(a_Alto[j] + 30);
+                texto.setTextSize(a_Tamano[j] - 2);
+                if (j <= nCol_Fijas) {
+                    fila_C.addView(texto);
+                } else {
+                    if (c_fun.la_cadena_es_numero(texto.getText().toString())) { // C_mabg_1
+                        texto.setGravity(Gravity.END);
+//                        String Numero = formato.format(Double.parseDouble(texto.getText().toString()));
+//                        Numero = Numero.replace(",", "*");
+//                        Numero = Numero.replace(".", ",");
+//                        Numero = Numero.replace("*", ".");
+//                        texto.setText(Numero);
+                    } else {
+                        texto.setGravity(Gravity.START);
                     }
+                    fila_D.addView(texto);
                 }
             }
+            _tab_C.addView(fila_C);
+            _tab_D.addView(fila_D);
+//            _ly_tbl.bringToFront();
+            //TODO
+            // _lv_filtro[nCatalogo_Visible]._lv.setVisibility(View.GONE);
+
         }
-        int nC = 0;
-        for (int iR = 0; iR < _tab_D.getChildCount(); iR++) {
-            View parentRow = _tab_D.getChildAt(iR);
-            if (parentRow instanceof TableRow) {
-                for (int iC_td = 0; iC_td < ((TableRow) parentRow).getChildCount(); iC_td++) {
-                    TextView txtV = (TextView) ((TableRow) parentRow).getChildAt(iC_td);
-                    if (txtV instanceof TextView) {
-                        nC = iC_td + nCol_Tb;
-                        txtV.setText(v_tabla[it][nC][iR]);
-                    }
-                }
-            }
-        }
+
+
+//        TableLayout _tab_C, _tab_D;
+//        int iC_tc = 0, nCol_Tc = 0 , nRc=0;
+//        Log.i("nCol"+n_Col," nRen="+n_Ren);
+//        _tab_C = (TableLayout) getActivity().findViewById(R.id._TablaC); // Detalle cve + descripción
+//        _tab_D = (TableLayout) getActivity().findViewById(R.id._TablaD); // Detalle numerico
+//        nRc = _tab_C.getChildCount();
+//        for (int iR = 0; iR < nRc ; iR++) {
+//            View parentRow = _tab_C.getChildAt(iR);
+//            if (parentRow instanceof TableRow) {
+//                nCol_Tc = ((TableRow) parentRow).getChildCount();
+//                for (iC_tc = 0; iC_tc < nCol_Tc; iC_tc++) {
+//                    TextView txtV = (TextView) ((TableRow) parentRow).getChildAt(iC_tc);
+//                    if (txtV instanceof TextView) {
+//                        Log.i("it="+it," iC_tc="+iC_tc+" iR="+iR);
+//                        txtV.setText(v_tabla[it][iC_tc][iR]);
+//                    }
+//                }
+//            }
+//        }
+//        int nC = 0;
+//        for (int iR = 0; iR < _tab_D.getChildCount(); iR++) {
+//            View parentRow = _tab_D.getChildAt(iR);
+//            if (parentRow instanceof TableRow) {
+//                for (int iC_td = 0; iC_td < ((TableRow) parentRow).getChildCount(); iC_td++) {
+//                    TextView txtV = (TextView) ((TableRow) parentRow).getChildAt(iC_td);
+//                    if (txtV instanceof TextView) {
+//                        nC = iC_td + nCol_Tc;
+//                        txtV.setText(v_tabla[it][nC][iR]);
+//                    }
+//                }
+//            }
+//        }
     }
 
-    public void anterior_consulta(View v) {
+    // ==========================================================================================================
+    public void anterior_consulta() {
         if (iConta == -1 || iConta == 0) {
-            //Snackbar.make(getView(), "Estas en el inicio", Snackbar.LENGTH_SHORT)
-            //        .setAction("Action", null).show();
-            Toast.makeText(getActivity(), "Estas en el inicio", Toast.LENGTH_SHORT).show();
+            Snackbar.make(getView(), "Estas en la consulta inicial ...", Snackbar.LENGTH_SHORT)
+                    .setAction("Action", null).show();
+            //Toast.makeText(getActivity(), "Estas en el inicio", Toast.LENGTH_SHORT).show();
 
         } else {
             if (iConta > 0) {
@@ -1206,31 +1324,34 @@ public class ConfiguracionFragment extends Fragment {
         }
     }
 
+    // ==========================================================================================================
     public void siguiente_consulta() {
+        if (iConta == -1 || iConta >= it)
+            Snackbar.make(getView(), "Estas en la consulta final ...", Snackbar.LENGTH_SHORT)
+                    .setAction("Action", null).show();
+        else {
+            if (iConta < it) {
+                iConta++;
+                llena_tabla(iConta);
+            }
+        }
 
     }
     // ============================================================= c_mabg_1
 
-    public interface empleaMetodos {
-        void metodo1();
-
-    }
-
-    public void metodo1() {
-        Toast.makeText(getActivity(), "metodo1", Toast.LENGTH_SHORT).show();
-    }
-
-    public void metodo2() {
-        Toast.makeText(getActivity(), "metodo2", Toast.LENGTH_SHORT).show();
-    }
-
     public boolean usuario_logeado() {
-        if ( !l_Responsabilidad ) {
-            Toast.makeText(g_contexto, "Se requiere  seleccionar responsabilidad ....", Toast.LENGTH_LONG).show();
+        if (!l_Responsabilidad) {
+            Snackbar.make(getView(), "Se requiere seleccionar responsabilidad ....", Snackbar.LENGTH_SHORT)
+                    .setAction("Action", null).show();
+        }
+        if (!l_Agrupa) {
+            Snackbar.make(getView(), "Se requiere seleccionar agrupación ....", Snackbar.LENGTH_SHORT)
+                    .setAction("Action", null).show();
             return false;
         }
         return true;
 
     }
+
 
 }

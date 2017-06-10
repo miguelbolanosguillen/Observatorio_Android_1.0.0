@@ -1,9 +1,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:design="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fragment_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <LinearLayout
+        android:id="@+id/ly_main_reporte"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
@@ -79,14 +83,15 @@
                         android:layout_gravity="top|right"
 
                         ></Spinner>
+
                     <TextView
                         android:id="@+id/txt_consulta"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:visibility="invisible"
                         android:text="Fecha"
-                        android:textSize="11dp"/>
+                        android:textSize="11dp"
+                        android:visibility="invisible" />
 
 
                 </LinearLayout>
@@ -242,4 +247,32 @@
             android:orientation="horizontal" />
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/ly_main_reporte"
+        android:foregroundGravity="bottom"
+        android:gravity="bottom"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_ant"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@android:drawable/ic_media_previous"
+            android:backgroundTint="@color/rojito"
+            android:layout_gravity="bottom|left"
+            style="@style/Base.Theme.AppCompat.Dialog"
+            />
+
+        <Button
+            android:id="@+id/btn_sig"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:backgroundTint="@color/rojito"
+            android:background="@android:drawable/ic_media_next"
+            android:layout_gravity="bottom|right"
+            style="@style/Base.Theme.AppCompat.CompactMenu"
+            />
+    </LinearLayout>
 </RelativeLayout>

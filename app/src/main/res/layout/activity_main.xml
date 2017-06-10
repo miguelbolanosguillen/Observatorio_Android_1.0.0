@@ -20,6 +20,7 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar" />
 
 
+
     <FrameLayout
         android:id="@+id/container1"
         android:layout_width="match_parent"
@@ -40,17 +41,17 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end">
 
-            <com.getbase.floatingactionbutton.FloatingActionsMenu
-                android:id="@+id/menu_fab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:fab_labelStyle="@style/Etiquetas"
-                fab:fab_addButtonColorNormal="@color/colorPrimary"
-                fab:fab_addButtonSize="mini"
-                fab:fab_labelsPosition="left"
-                app:fab_addButtonColorPressed="@color/colorAccent"
-                android:layout_gravity="bottom|end"
-                android:layout_margin="10dp">
+            <!--<com.getbase.floatingactionbutton.FloatingActionsMenu-->
+                <!--android:id="@+id/menu_fab"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--app:fab_labelStyle="@style/Etiquetas"-->
+                <!--fab:fab_addButtonColorNormal="@color/colorPrimary"-->
+                <!--fab:fab_addButtonSize="mini"-->
+                <!--fab:fab_labelsPosition="left"-->
+                <!--app:fab_addButtonColorPressed="@color/colorAccent"-->
+                <!--android:layout_gravity="bottom|end"-->
+                <!--android:layout_margin="10dp">-->
 
                 <!--<com.getbase.floatingactionbutton.FloatingActionButton
                     android:id="@+id/accion_favorito"
@@ -70,26 +71,26 @@
                     fab:fab_size="mini"
                     fab:fab_title="b3" />-->
 
-                <com.getbase.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/accion_carrito"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    fab:fab_colorNormal="@color/colorPrimary"
-                    fab:fab_icon="@drawable/icopdf"
-                    app:fab_colorPressed="@color/colorAccent"
-                    fab:fab_size="mini"
-                    fab:fab_title="PDF" />
+                <!--<com.getbase.floatingactionbutton.FloatingActionButton-->
+                    <!--android:id="@+id/accion_carrito"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--fab:fab_colorNormal="@color/colorPrimary"-->
+                    <!--fab:fab_icon="@drawable/icopdf"-->
+                    <!--app:fab_colorPressed="@color/colorAccent"-->
+                    <!--fab:fab_size="mini"-->
+                    <!--fab:fab_title="PDF" />-->
 
-                <com.getbase.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/accion_grafica"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    fab:fab_colorNormal="@color/colorPrimary"
-                    fab:fab_icon="@drawable/icografica"
-                    app:fab_colorPressed="@color/colorAccent"
-                    fab:fab_size="mini"
-                    app:fab_title="Grafica"/>
-            </com.getbase.floatingactionbutton.FloatingActionsMenu>
+                <!--<com.getbase.floatingactionbutton.FloatingActionButton-->
+                    <!--android:id="@+id/accion_grafica"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--fab:fab_colorNormal="@color/colorPrimary"-->
+                    <!--fab:fab_icon="@drawable/icografica"-->
+                    <!--app:fab_colorPressed="@color/colorAccent"-->
+                    <!--fab:fab_size="mini"-->
+                    <!--app:fab_title="Grafica"/>-->
+            <!--</com.getbase.floatingactionbutton.FloatingActionsMenu>-->
         </LinearLayout>
 
     </FrameLayout>
@@ -97,14 +98,14 @@
 
     <!-- barra de inferior de fragments -->
     <android.support.design.widget.BottomNavigationView
-        android:elevation="0dp"
         android:id="@+id/navigation11"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@color/colorPrimary"
+        android:elevation="0dp"
         app:itemIconTint="@drawable/seleccion_botom"
         app:itemTextColor="@drawable/seleccion_botom"
-        design:menu="@menu/bottom_nav_items"/>
+        design:menu="@menu/bottom_nav_items" />
 
 </LinearLayout>

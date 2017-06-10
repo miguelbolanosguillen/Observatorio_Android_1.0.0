@@ -32,6 +32,7 @@ public class c_fun {
         String cadena = cadena1;
         cadena = cadena.trim();
         cadena = cadena.replace(".","");//quita punto decimal, si lo hay
+        cadena = cadena.replace(",","");//quita comas, si las hay
         if ( cadena==null || cadena.isEmpty() ){
             //Log.i("Cadena","vacia o nula");
             return false;

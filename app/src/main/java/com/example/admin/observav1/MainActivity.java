@@ -29,8 +29,8 @@ public class MainActivity extends AppCompatActivity implements MiComunicacion {
     private Toolbar appbar;
     public static boolean l_EdoEjer = true;     // c_mabg1
     Fragment finf, fconf, frepo, detf;
-    FloatingActionButton fabGrafica;
-    FloatingActionsMenu famb;
+    // FloatingActionButton fabGrafica;
+    //FloatingActionsMenu famb;
     String pro = "";
     public static Context g_contexto;
 
@@ -43,11 +43,11 @@ public class MainActivity extends AppCompatActivity implements MiComunicacion {
         agregarFragmentos();
         ocultarFragmentos();
 
-        fabGrafica = (FloatingActionButton) findViewById(R.id.accion_grafica);
-        famb = (FloatingActionsMenu) findViewById(R.id.menu_fab);
+        // 7/Jun/2017 fabGrafica = (FloatingActionButton) findViewById(R.id.accion_grafica);
+        // 7/Jun/2017 famb = (FloatingActionsMenu) findViewById(R.id.menu_fab);
 
 
-        appbar = (Toolbar) findViewById(R.id.appbar);
+        appbar = (Toolbar) findViewById(R.id.appbar); // Declarada en activity_main.xml
         setSupportActionBar(appbar);
 
         mBottomNav = (BottomNavigationView) getWindow().findViewById(R.id.navigation11);
@@ -70,13 +70,13 @@ public class MainActivity extends AppCompatActivity implements MiComunicacion {
         selectFragment(selectedItem);
 
 
-        fabGrafica.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(getApplication(), GraficaActivity.class);
-                startActivity(i);
-            }
-        });
+//        fabGrafica.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent i = new Intent(getApplication(), GraficaActivity.class);
+//                startActivity(i);
+//            }
+//        });
 
 
     }
@@ -124,13 +124,13 @@ public class MainActivity extends AppCompatActivity implements MiComunicacion {
             super.onBackPressed();
         }
     }
-
+//  Selecciona el fragmento ( Reportes / informes / Configuración )
     private void selectFragment(MenuItem item) {
 
         switch (item.getItemId()) {
             case R.id.menu_reporte:
                 if (l_Responsabilidad && l_Entrada ) {
-                    //muetraBotonesFlotante();
+                    // muestraBotonesFlotante();
                     ocultarFragmentos();
                     muestraFragmento(frepo);
                     if (l_EdoEjer) {                  // c_mabg_1
@@ -158,11 +158,11 @@ public class MainActivity extends AppCompatActivity implements MiComunicacion {
             case R.id.menu_configuracion:
 
                 if (pro.equals("")) {
-                    ocultaBotonesFlotante();
+                    // ocultaBotonesFlotante();
                     ocultarFragmentos();
                     muestraFragmento(fconf);
                 } else {
-                    ocultaBotonesFlotante();
+                    // ocultaBotonesFlotante();
                     ocultarFragmentos();
                     muestraFragmento(detf);
                 }
@@ -220,13 +220,13 @@ public class MainActivity extends AppCompatActivity implements MiComunicacion {
 
     }
 
-    public void ocultaBotonesFlotante() {
-        famb.setVisibility(View.GONE);
-    }
-
-    public void muetraBotonesFlotante() {
-        famb.setVisibility(View.VISIBLE);
-    }
+//    public void ocultaBotonesFlotante() {
+//        famb.setVisibility(View.GONE);
+//    }
+//
+//    public void muestraBotonesFlotante() {
+//        famb.setVisibility(View.VISIBLE);
+//    }
 
 
     @Override
