@@ -81,7 +81,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_gravity="top|right"
-
                         ></Spinner>
 
                     <TextView
@@ -153,12 +152,14 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:layout_width="0dp"
+                        android:id="@+id/_tv_filtro"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
-                        android:text="Ningun filtro"
-                        android:textSize="11dp" />
+                        android:text=""
+                        android:textColor="@color/rojote"
+                        android:textSize="7dp" />
                 </LinearLayout>
 
             </LinearLayout>
@@ -264,6 +265,12 @@
             android:layout_gravity="bottom|left"
             style="@style/Base.Theme.AppCompat.Dialog"
             />
+        <TextView
+            android:id="@+id/_tv_Conta"
+            android:text="0"
+            android:textSize="@dimen/fab_icon_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/btn_sig"

@@ -38,8 +38,11 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
+import static android.content.Context.LOCATION_SERVICE;
 import static com.example.admin.observav1.MainActivity.g_contexto;
 import static com.example.admin.observav1.MainActivity.l_EdoEjer;
 
@@ -65,7 +68,9 @@ public class ConfiguracionFragment extends Fragment {
     private int it = -1, iConta = -1;
     public String[][][] v_tabla = new String[30][][];   // 30 reportes, n_Columnas , n_Renglones
     private int[][] v_Col_Ren = new int[30][2];         // Guarda el numero de columnas y de renglones de cada consulta
-    private String[][] v_Ren;
+    private String[] v_Tit_Fil = new String[30];        // Guarda la descripción de los titulos de los filtros
+    private String[][] v_Ren;                           // Auxiliar para llenar v_tabla
+    public Boolean[]    v_ordena;                       // true ascendente , false descendente
 
     public static Button[] _btn_rep;
     public static Button[] _btn_filtro;
@@ -279,150 +284,7 @@ public class ConfiguracionFragment extends Fragment {
                             new Runnable() {
                                 public void run() {
 
-                                    String cFiltro;
-                                    DecimalFormat formato = new DecimalFormat("###,###,###,##0.00");// C_mabg_1
-                                    cFiltro = trae_filtros();
-                                    String cPar = "?fecha=" + observatorio.getFecha() +
-                                            "&tipo=" + g_agrupa +
-                                            "&idReportGenera=" + g_reporte +
-                                            "&responsabilidad=" + o_usuario.getF_id_responsabilidad() +
-                                            cFiltro +
-                                            "&anio=" + observatorio.getPeriodo();
-
-                                    //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-                                    View v_tbl = LayoutInflater.from(g_contexto).inflate(R.layout.tbl_consulta, null);
-                                    _ly_tbl.addView(v_tbl);
-// ===================================================================================================================
-// ===================================================================================================================
-                                    scrollView1 = (ObservableScrollView) getActivity().findViewById(R.id.SV_C);
-                                    // el this se puede poner por que se implemento la interface implements ScrollViewListener
-                                    scrollView1.setScrollViewListener(new ScrollViewListener() {
-                                        @Override
-                                        public void onScrollChanged(ObservableScrollView scrollView, int x, int y, int oldx, int oldy) {
-                                        /*if (scrollView == scrollView1) {
-                                            scrollView2.scrollTo(x, y);
-                                        } else if (scrollView == scrollView2) {
-                                            scrollView1.scrollTo(x, y);
-                                        }*/
-                                            if (interceptScroll) {
-                                                if (scrollView == scrollView1)
-                                                    scrollView2.onOverScrolled(x, y, true, true);
-                                                else if (scrollView == scrollView2)
-                                                    scrollView1.onOverScrolled(x, y, true, true);
-                                            }
-
-                                        }
-                                    });
-                                    scrollView2 = (ObservableScrollView) getActivity().findViewById(R.id.SV_D);
-                                    scrollView2.setScrollViewListener(new ScrollViewListener() {
-                                        @Override
-                                        public void onScrollChanged(ObservableScrollView scrollView, int x, int y, int oldx, int oldy) {
-                                        /*if (scrollView == scrollView1) {
-                                            scrollView2.scrollTo(x, y);
-                                        } else if (scrollView == scrollView2) {
-                                            scrollView1.scrollTo(x, y);
-                                        }*/
-                                            if (interceptScroll) {
-                                                if (scrollView == scrollView1)
-                                                    scrollView2.onOverScrolled(x, y, true, true);
-                                                else if (scrollView == scrollView2)
-                                                    scrollView1.onOverScrolled(x, y, true, true);
-                                            }
-
-                                        }
-                                    });
-
-                                    HsV_B = (HorizontalScrollView) getActivity().findViewById(R.id.HSV_B);
-                                    HsV_D = (HorizontalScrollView) getActivity().findViewById(R.id.HSV_D);
-                                    syncScrolls(HsV_B, HsV_D);
-                                    syncScrolls(HsV_D, HsV_B);
-// =================================================== Leo el pres_reports_column para saber que columnas necesito traer
-                                    llena_encabezados();
-// ========================================================================================================
-                                    // Log.i("Genera consulta","genera_consultaResp.php"+cPar);
-
-                                    if (o_ldap.m_php_jason("genera_consultaResp.php", cPar)) {
-
-                                        try {
-                                            Boolean l_JSon = true;
-
-                                            a_Cam_Json[0] = g_agrupa;
-
-                                            TableLayout _tab_C, _tab_D;
-                                            TableLayout.LayoutParams layOutRenglon;
-
-                                            _tab_C = (TableLayout) getActivity().findViewById(R.id._TablaC);
-                                            _tab_D = (TableLayout) getActivity().findViewById(R.id._TablaD);
-
-                                            _tab_C.removeAllViews();
-                                            _tab_D.removeAllViews();
-
-                                            JSONArray data_array = new JSONArray(o_ldap.getV_cadena_json());
-                                            n_Ren = data_array.length();                    // C_mabg_1
-                                            v_Ren = new String[n_Col][n_Ren];               // C_mabg_1
-                                            for (int i = 0; i < n_Ren; i++) {               // C_mabg_1  // Renglones
-
-                                                TableRow fila_C = new TableRow(getActivity());
-                                                TableRow fila_D = new TableRow(getActivity());
-                                                TableRow.LayoutParams layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
-                                                fila_C.setLayoutParams(layoutFila);
-                                                fila_D.setLayoutParams(layoutFila);
-
-                                                //backround para las filas del reporte
-                                                if ((i + 1) % 2 == 0) {
-
-                                                } else {
-                                                    fila_C.setBackgroundResource(R.color.grisine);
-                                                    fila_D.setBackgroundResource(R.color.grisine);
-                                                }
-
-
-                                                JSONObject obj = new JSONObject(data_array.get(i).toString());
-                                                //Log.e("===","=====================================================================");
-                                                for (int j = 0; j < n_Col; j++) {       // C_mabg_1 Columnas  a_Cam_Json
-                                                    TextView texto = new TextView(getActivity());
-                                                    texto.setText(obj.getString(a_Cam_Json[j]));
-                                                    texto.setWidth(a_Ancho[j]);
-                                                    texto.setHeight(a_Alto[j] + 30);
-                                                    texto.setTextSize(a_Tamano[j] - 2);
-                                                    //Log.e(a_Cam_Json[j],obj.getString(a_Cam_Json[j]));
-                                                    if (j <= nCol_Fijas) {
-                                                        fila_C.addView(texto);
-                                                    } else {
-                                                        if (c_fun.la_cadena_es_numero(texto.getText().toString())) { // C_mabg_1
-                                                            texto.setGravity(Gravity.END);
-                                                            String Numero = formato.format(Double.parseDouble(texto.getText().toString()));
-                                                            Numero = Numero.replace(",", "*");
-                                                            Numero = Numero.replace(".", ",");
-                                                            Numero = Numero.replace("*", ".");
-                                                            texto.setText(Numero);
-                                                        } else {
-                                                            texto.setGravity(Gravity.START);
-                                                        }
-                                                        fila_D.addView(texto);
-                                                    }
-                                                    v_Ren[j][i] = texto.getText().toString();     // C_mabg_1
-                                                }
-                                                _tab_C.addView(fila_C);
-                                                _tab_D.addView(fila_D);
-                                                _ly_tbl.bringToFront();
-                                                //TODO
-                                                // _lv_filtro[nCatalogo_Visible]._lv.setVisibility(View.GONE);
-
-                                            }
-                                            guarda_cuadricula();    // C_mabg_1
-                                            oculta_filtro_visible();
-                                            Toast.makeText(getActivity(), "Termino consulta..", Toast.LENGTH_SHORT).show();
-                                        } catch (JSONException e) {
-                                            //Log.e("***","=====================================================================\n");
-                                            //e.printStackTrace();
-                                            Log.w("Catch JSOn", "boton_consulta_información" + e);
-                                            // Log.e("****","=====================================================================\n");
-                                        }
-                                    } else {
-                                        Toast.makeText(getActivity(), "No hay información " + cPar, Toast.LENGTH_SHORT).show();
-                                    }
-                                    cierra_filtro();
+                                    genera_consulta();
                                     progressDialog.dismiss();
                                 }
                             }, 7500);
@@ -504,7 +366,155 @@ public class ConfiguracionFragment extends Fragment {
         });
     }
 
+    //  ======================= genera consulta y la despliega en las tablas ===========================
+    void genera_consulta() {
+        String cFiltro;
+        DecimalFormat formato = new DecimalFormat("###,###,###,##0.00");// C_mabg_1
+        cFiltro = trae_filtros();
+        String cPar = "?fecha=" + observatorio.getFecha() +
+                "&tipo=" + g_agrupa +
+                "&idReportGenera=" + g_reporte +
+                "&responsabilidad=" + o_usuario.getF_id_responsabilidad() +
+                cFiltro +
+                "&anio=" + observatorio.getPeriodo();
 
+        //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+        View v_tbl = LayoutInflater.from(g_contexto).inflate(R.layout.tbl_consulta, null);
+        _ly_tbl.addView(v_tbl);
+// ===================================================================================================================
+// ===================================================================================================================
+        scrollView1 = (ObservableScrollView) getActivity().findViewById(R.id.SV_C);
+        // el this se puede poner por que se implemento la interface implements ScrollViewListener
+        scrollView1.setScrollViewListener(new ScrollViewListener() {
+            @Override
+            public void onScrollChanged(ObservableScrollView scrollView, int x, int y, int oldx, int oldy) {
+                                        /*if (scrollView == scrollView1) {
+                                            scrollView2.scrollTo(x, y);
+                                        } else if (scrollView == scrollView2) {
+                                            scrollView1.scrollTo(x, y);
+                                        }*/
+                if (interceptScroll) {
+                    if (scrollView == scrollView1)
+                        scrollView2.onOverScrolled(x, y, true, true);
+                    else if (scrollView == scrollView2)
+                        scrollView1.onOverScrolled(x, y, true, true);
+                }
+
+            }
+        });
+        scrollView2 = (ObservableScrollView) getActivity().findViewById(R.id.SV_D);
+        scrollView2.setScrollViewListener(new ScrollViewListener() {
+            @Override
+            public void onScrollChanged(ObservableScrollView scrollView, int x, int y, int oldx, int oldy) {
+                                        /*if (scrollView == scrollView1) {
+                                            scrollView2.scrollTo(x, y);
+                                        } else if (scrollView == scrollView2) {
+                                            scrollView1.scrollTo(x, y);
+                                        }*/
+                if (interceptScroll) {
+                    if (scrollView == scrollView1)
+                        scrollView2.onOverScrolled(x, y, true, true);
+                    else if (scrollView == scrollView2)
+                        scrollView1.onOverScrolled(x, y, true, true);
+                }
+
+            }
+        });
+
+        HsV_B = (HorizontalScrollView) getActivity().findViewById(R.id.HSV_B);
+        HsV_D = (HorizontalScrollView) getActivity().findViewById(R.id.HSV_D);
+        syncScrolls(HsV_B, HsV_D);
+        syncScrolls(HsV_D, HsV_B);
+// =================================================== Leo el pres_reports_column para saber que columnas necesito traer
+        llena_encabezados();
+// ========================================================================================================
+        // Log.i("Genera consulta","genera_consultaResp.php"+cPar);
+
+        if (o_ldap.m_php_jason("genera_consultaResp.php", cPar)) {
+
+            try {
+                Boolean l_JSon = true;
+
+                a_Cam_Json[0] = g_agrupa;
+
+                TableLayout _tab_C, _tab_D;
+                TableLayout.LayoutParams layOutRenglon;
+
+                _tab_C = (TableLayout) getActivity().findViewById(R.id._TablaC);
+                _tab_D = (TableLayout) getActivity().findViewById(R.id._TablaD);
+
+                _tab_C.removeAllViews();
+                _tab_D.removeAllViews();
+
+                JSONArray data_array = new JSONArray(o_ldap.getV_cadena_json());
+                n_Ren = data_array.length();                    // C_mabg_1
+                v_Ren = new String[n_Col][n_Ren];               // C_mabg_1
+                for (int i = 0; i < n_Ren; i++) {               // C_mabg_1  // Renglones
+
+                    TableRow fila_C = new TableRow(getActivity());
+                    TableRow fila_D = new TableRow(getActivity());
+                    TableRow.LayoutParams layoutFila = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT);
+                    fila_C.setLayoutParams(layoutFila);
+                    fila_D.setLayoutParams(layoutFila);
+
+                    //backround para las filas del reporte
+                    if ((i + 1) % 2 == 0) {
+
+                    } else {
+                        fila_C.setBackgroundResource(R.color.grisine);
+                        fila_D.setBackgroundResource(R.color.grisine);
+                    }
+
+
+                    JSONObject obj = new JSONObject(data_array.get(i).toString());
+                    //Log.e("===","=====================================================================");
+                    for (int j = 0; j < n_Col; j++) {       // C_mabg_1 Columnas  a_Cam_Json
+                        TextView texto = new TextView(getActivity());
+                        texto.setText(obj.getString(a_Cam_Json[j]));
+                        texto.setWidth(a_Ancho[j]);
+                        texto.setHeight(a_Alto[j] + 30);
+                        texto.setTextSize(a_Tamano[j] - 2);
+                        //Log.e(a_Cam_Json[j],obj.getString(a_Cam_Json[j]));
+                        if (j <= nCol_Fijas) {
+                            fila_C.addView(texto);
+                        } else {
+                            if (c_fun.la_cadena_es_numero(texto.getText().toString())) { // C_mabg_1
+                                texto.setGravity(Gravity.END);
+                                String Numero = formato.format(Double.parseDouble(texto.getText().toString()));
+                                Numero = Numero.replace(",", "*");
+                                Numero = Numero.replace(".", ",");
+                                Numero = Numero.replace("*", ".");
+                                texto.setText(Numero);
+                            } else {
+                                texto.setGravity(Gravity.START);
+                            }
+                            fila_D.addView(texto);
+                        }
+                        v_Ren[j][i] = texto.getText().toString();     // C_mabg_1
+                    }
+                    _tab_C.addView(fila_C);
+                    _tab_D.addView(fila_D);
+                    _ly_tbl.bringToFront();
+                    //TODO
+                    // _lv_filtro[nCatalogo_Visible]._lv.setVisibility(View.GONE);
+
+                }
+                guarda_cuadricula(cFiltro);    // C_mabg_1
+                oculta_filtro_visible();
+                Toast.makeText(getActivity(), "Termino consulta..", Toast.LENGTH_SHORT).show();
+            } catch (JSONException e) {
+                //Log.e("***","=====================================================================\n");
+                //e.printStackTrace();
+                Log.w("Catch JSOn", "boton_consulta_información" + e);
+                // Log.e("****","=====================================================================\n");
+            }
+        } else {
+            Toast.makeText(getActivity(), "No hay información " + cPar, Toast.LENGTH_SHORT).show();
+        }
+        cierra_filtro();
+    }
+
+    //  ========================================================================================
     void llena_pantalla_genera(String cUsu, c_php_jason o_ldap) {
 
         String cSql;
@@ -548,7 +558,7 @@ public class ConfiguracionFragment extends Fragment {
         //Toast.makeText(g_contexto,cSql,Toast.LENGTH_SHORT).show();
     }
 
-    // ==============================================================================================================
+    //  =============================================================================================================
     public void adiciona_boton(LinearLayout _ly, int pos, LinearLayout.LayoutParams lv_param,
                                final String cFiltro, String[] aTitulo) {
         Button btn_;
@@ -644,7 +654,7 @@ public class ConfiguracionFragment extends Fragment {
         l_Agrupa = false;
         TableLayout _tab_w;
 
-
+//      Remuevo el contenido de las tablas donde se presenta la información egenrada
         _tab_w = (TableLayout) getActivity().findViewById(R.id._TablaA);
         if (_tab_w != null)
             _tab_w.removeAllViews();
@@ -704,7 +714,7 @@ public class ConfiguracionFragment extends Fragment {
 
             } catch (JSONException e) {
                 //e.printStackTrace();
-                Log.w("Catch JSOn", "Agrupaciones");
+                Log.w("****", "Catch JSOn Agrupaciones : " + cSql);
             }
         } else {
             Toast.makeText(g_contexto, "Inconsistencia 3 " + cSql, Toast.LENGTH_SHORT).show();
@@ -744,7 +754,7 @@ public class ConfiguracionFragment extends Fragment {
                 }
             } catch (JSONException e) {
                 //e.printStackTrace();
-                Log.w("Fechas:->", cSql);
+                Log.w("**** Fechas:->", cSql);
             }
         } else {
             otxt_fecha.setText("Sin Fecha");
@@ -752,7 +762,7 @@ public class ConfiguracionFragment extends Fragment {
             Toast.makeText(g_contexto, "Inconsistencia 1 " + cSql, Toast.LENGTH_SHORT).show();
         }
 // ======================================================================================================
-//      *******************************************************************************
+//      *********************************** Filtros asociados al reporte.
         cSql = "?sql=select-namefilter,field,fielddescrip,tablecatalog,tablemain-from-pres_reports_secondary_filters-" +
                 "where-idreportGenera=" + idReportGe[btn.getId()] + "-order-by-idsecondaryfilter";
 
@@ -793,7 +803,7 @@ public class ConfiguracionFragment extends Fragment {
 
             } catch (JSONException e) {
                 //e.printStackTrace();
-                Log.w("Filtros ", cSql);
+                Log.w("**** Filtros ", cSql);
             }
         } else {
             Toast.makeText(g_contexto, "Inconsistencia 4 " + cSql, Toast.LENGTH_SHORT).show();
@@ -986,6 +996,13 @@ public class ConfiguracionFragment extends Fragment {
                     texto.setHeight(a_Alto[i]);
                     texto.setTextSize(a_Tamano[i]);
                     texto.setGravity(Gravity.CENTER_HORIZONTAL);
+                    texto.setId(i);
+                    texto.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            click_ordena_columna(v);
+                        }
+                    });
 
                     cMovible = obj.getString("movable");
 
@@ -1069,6 +1086,59 @@ public class ConfiguracionFragment extends Fragment {
             }
         });
 
+    }
+
+    public void click_ordena_columna(View v) {
+        int nCol = v.getId();
+        int nColumnas = v_Col_Ren[it][0];
+        int nRenglones = (v_Col_Ren[it][1]) - 1;
+        int nRen = (v_tabla[iConta][nCol].length) - 1;
+        Boolean l_Numero = false, l_Cambia = false;
+        String[] v_Aux = new String[nColumnas];
+        String cValor, cAnt, cPost;
+        Double dAnt, dPost;
+
+        Log.d("Columna " + nCol, " Renglones=" + nRenglones + " Columnas " + nColumnas);
+        cValor = v_tabla[iConta][nCol][0];
+        // Si el strins es igual mayusculas y minusculas , entonces es un número
+        l_Numero = cValor.toLowerCase() == cValor.toUpperCase();
+        for (int i = 0; i < nRenglones; i++) {
+            for (int j = i + 1; j < nRenglones; j++) {
+                l_Cambia = false;
+                cAnt = v_tabla[iConta][nCol][i];
+                cPost = v_tabla[iConta][nCol][j];
+                if (l_Numero) {
+                    cAnt = (cAnt.trim()).replaceAll(",", "");
+                    cPost = (cPost.trim()).replaceAll(",", "");
+                    dAnt = Double.parseDouble(cAnt);
+                    dPost = Double.parseDouble(cPost);
+                    if ( dAnt > dPost)
+                        l_Cambia = true;
+                } else {
+                    if (cAnt.compareToIgnoreCase(cPost) > 0) {
+                        l_Cambia = true;
+                    }
+                }
+                if ( l_Cambia ) {
+                    for (int z = 0; z < nColumnas; z++) {
+                        v_Aux[z] = v_tabla[iConta][z][i];
+                    }
+                    for (int z = 0; z < nColumnas; z++) {
+                        v_tabla[iConta][z][i] = v_tabla[iConta][z][j];
+                        v_tabla[iConta][z][j] = v_Aux[z];
+                    }
+                }
+            }
+        }
+        llena_tabla(it);
+
+//        for(int i=0;i<10;i++){
+//            for(int j=i+1;j<10;j++){
+//                //only checking the 3rd column
+//                if(v_tabla[it][i][2]>v_tabla[it][i][2][j][2])
+//                    swap(points[i],points[j]);
+//            }
+//        }
     }
 
     // ==========================================================================================================
@@ -1188,12 +1258,17 @@ public class ConfiguracionFragment extends Fragment {
 //    }
 
     // ============================================================= c_mabg_1
-    public void guarda_cuadricula() {   // C_mabg_1
+    public void guarda_cuadricula(String cFiltro) {   // C_mabg_1
         it++;
-        if (it > 0) {
+        if (it >= 0) {
             iConta = it;
         }
+//      Log.d("it=",it+" "+cFiltro);
+        v_Tit_Fil[it] = cFiltro.replaceAll("&filtro\\d=", "");
+        v_Tit_Fil[it] = v_Tit_Fil[it].replaceAll("&valorFiltro\\d", "");
+        despliega_contador(iConta);
         v_tabla[it] = new String[n_Col][n_Ren];     // [n_Ren + 1]; no guardo los encabezados;
+        v_ordena = new Boolean[n_Col];
 //      for (int nC = 0; nC < n_Col; nC++) {        // No guardo encabezados
 //          v_tabla[it][nC][0] = v_Col[nC];
 //      }
@@ -1202,17 +1277,18 @@ public class ConfiguracionFragment extends Fragment {
                 v_tabla[it][nC][nR] = v_Ren[nC][nR];
             }
         }
-        v_Col_Ren[it][0] = n_Col;
-        v_Col_Ren[it][1] = n_Ren;
+
+        v_Col_Ren[it][0] = n_Col;   // Se guarda el numero de columnas  de la consulta
+        v_Col_Ren[it][1] = n_Ren;   // Se guarda el numero de renglones de la consulta
     }
 
     // ==========================================================================================================
-    public void llena_tabla(int it) {
+    public void llena_tabla(int it) { // LLena las tablas C y D para poder ser recuperadas con los botones anterior y siguiente
 
 
 //      Log.d("it_j","="+v_tabla[it][0].length+" it-j-r="+v_tabla[it][0][0].length()+" n_ren="+n_Ren+" n_Col="+n_Col);
         TableLayout _tab_C, _tab_D;
-        TableLayout.LayoutParams layOutRenglon;
+
 
         _tab_C = (TableLayout) getActivity().findViewById(R.id._TablaC);
         _tab_D = (TableLayout) getActivity().findViewById(R.id._TablaD);
@@ -1220,9 +1296,7 @@ public class ConfiguracionFragment extends Fragment {
         _tab_C.removeAllViews();
         _tab_D.removeAllViews();
 
-//        JSONArray data_array = new JSONArray(o_ldap.getV_cadena_json());
-//        n_Ren = data_array.length();                    // C_mabg_1
-//        v_Ren = new String[n_Col][n_Ren];               // C_mabg_1
+
         for (int i = 0; i < v_Col_Ren[it][1]; i++) {               // C_mabg_1  // Renglones
 
             TableRow fila_C = new TableRow(getActivity());
@@ -1267,9 +1341,8 @@ public class ConfiguracionFragment extends Fragment {
             }
             _tab_C.addView(fila_C);
             _tab_D.addView(fila_D);
-//            _ly_tbl.bringToFront();
-            //TODO
-            // _lv_filtro[nCatalogo_Visible]._lv.setVisibility(View.GONE);
+//          _ly_tbl.bringToFront();
+//          _lv_filtro[nCatalogo_Visible]._lv.setVisibility(View.GONE);
 
         }
 
@@ -1319,6 +1392,7 @@ public class ConfiguracionFragment extends Fragment {
             if (iConta > 0) {
                 iConta--;
                 llena_tabla(iConta);
+                despliega_contador(iConta);
             }
 
         }
@@ -1333,9 +1407,19 @@ public class ConfiguracionFragment extends Fragment {
             if (iConta < it) {
                 iConta++;
                 llena_tabla(iConta);
+                despliega_contador(iConta);
             }
         }
 
+    }
+
+    // =============================================================
+    public void despliega_contador(int iConta) {
+        TextView _tv_Filtro = (TextView) getActivity().findViewById(R.id._tv_filtro);
+        TextView _tv_Conta = (TextView) getActivity().findViewById(R.id._tv_Conta);
+        _tv_Conta.setText(String.valueOf(iConta + 1));
+        //       Log.i("iConta","="+(iConta)+" "+v_Tit_Fil[iConta+1]);
+        _tv_Filtro.setText(v_Tit_Fil[iConta]);
     }
     // ============================================================= c_mabg_1
 
