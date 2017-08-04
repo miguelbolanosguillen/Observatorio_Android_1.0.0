@@ -9,8 +9,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.Display;
 import android.view.MenuItem;
+import android.view.Surface;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
@@ -19,6 +24,7 @@ import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import static com.example.admin.observav1.ConfiguracionFragment._btn_rep;
 import static com.example.admin.observav1.ConfiguracionFragment.l_Entrada;
 import static com.example.admin.observav1.ConfiguracionFragment.l_Responsabilidad;
+import static java.security.AccessController.getContext;
 
 public class MainActivity extends AppCompatActivity implements MiComunicacion {
 
@@ -29,8 +35,8 @@ public class MainActivity extends AppCompatActivity implements MiComunicacion {
     private Toolbar appbar;
     public static boolean l_EdoEjer = true;     // c_mabg1
     Fragment finf, fconf, frepo, detf;
-    // FloatingActionButton fabGrafica;
-    //FloatingActionsMenu famb;
+    FloatingActionButton fabGrafica;
+    FloatingActionsMenu famb;
     String pro = "";
     public static Context g_contexto;
 
@@ -39,12 +45,17 @@ public class MainActivity extends AppCompatActivity implements MiComunicacion {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+//
+        resolucion();
+//        int width = this.getResources().getConfiguration().screenWidthDp;
+//        int height = this.getResources().getConfiguration().screenHeightDp;
+//        Toast.makeText(this,"W="+width+" H="+height,Toast.LENGTH_LONG).show();
+//
         agregarFragmentos();
         ocultarFragmentos();
 
-        // 7/Jun/2017 fabGrafica = (FloatingActionButton) findViewById(R.id.accion_grafica);
-        // 7/Jun/2017 famb = (FloatingActionsMenu) findViewById(R.id.menu_fab);
+        fabGrafica = (FloatingActionButton) findViewById(R.id.accion_grafica);
+        famb = (FloatingActionsMenu) findViewById(R.id.menu_fab);
 
 
         appbar = (Toolbar) findViewById(R.id.appbar); // Declarada en activity_main.xml
@@ -70,17 +81,60 @@ public class MainActivity extends AppCompatActivity implements MiComunicacion {
         selectFragment(selectedItem);
 
 
-//        fabGrafica.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent i = new Intent(getApplication(), GraficaActivity.class);
-//                startActivity(i);
-//            }
-//        });
+        fabGrafica.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplication(), GraficaActivity.class);
+                startActivity(i);
+            }
+        });
 
 
     }
 
+    public void resolucion(){
+        String sT1,sT2,sT3,sT4,sT5;
+        Display display = ((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+
+
+        sT1 = "Ancho de la Pantalla " + Integer.toString(display.getWidth());
+        sT2 = "Alto de la pantalla " + Integer.toString(display.getHeight());
+        sT3 = "Densidad de la pantalla (dpi) " + getResources().getDisplayMetrics().densityDpi;
+
+        float scale = getApplicationContext().getResources().getDisplayMetrics().density;
+        sT4 = "Escala " + Float.toString(getApplicationContext().getResources().getDisplayMetrics().density);
+        sT5 = "";
+        // buscando los pixeles a partir de dips con la densidad
+        int dips = 200;
+        float pixelBoton = 0;
+        float scaleDensity = 0;
+
+        DisplayMetrics metrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+        switch(metrics.densityDpi)
+        {
+            case DisplayMetrics.DENSITY_HIGH: //HDPI
+                sT5 = "Alta Densidad";
+                scaleDensity = scale * 240;
+                pixelBoton = dips * (scaleDensity / 240);
+                break;
+            case DisplayMetrics.DENSITY_MEDIUM: //MDPI
+                sT5 = "mediana Densidad";
+                scaleDensity = scale * 160;
+                pixelBoton = dips * (scaleDensity / 160);
+                break;
+
+            case DisplayMetrics.DENSITY_LOW:  //LDPI
+                sT5 = "baja Densidad";
+                scaleDensity = scale * 120;
+                pixelBoton = dips * (scaleDensity / 120);
+                break;
+        }
+        Toast.makeText(this,sT1+" "+sT2+" "+sT3+" "+sT4+" "+sT5+" PixelBoton="+Float.toString(pixelBoton),Toast.LENGTH_LONG).show();
+        Log.d(getClass().getSimpleName(), sT1+" "+sT2+" "+sT3+" "+sT4+" "+sT5+" PixelBoton="+pixelBoton);
+
+    }
    /* @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu items for use in the action bar

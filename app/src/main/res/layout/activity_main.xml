@@ -41,56 +41,58 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end">
 
-            <!--<com.getbase.floatingactionbutton.FloatingActionsMenu-->
-                <!--android:id="@+id/menu_fab"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--app:fab_labelStyle="@style/Etiquetas"-->
-                <!--fab:fab_addButtonColorNormal="@color/colorPrimary"-->
-                <!--fab:fab_addButtonSize="mini"-->
-                <!--fab:fab_labelsPosition="left"-->
-                <!--app:fab_addButtonColorPressed="@color/colorAccent"-->
-                <!--android:layout_gravity="bottom|end"-->
-                <!--android:layout_margin="10dp">-->
+            <com.getbase.floatingactionbutton.FloatingActionsMenu
+                android:id="@+id/menu_fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:fab_labelStyle="@style/Etiquetas"
+                fab:fab_addButtonColorNormal="@color/colorPrimary"
+                fab:fab_addButtonSize="mini"
+                fab:fab_labelsPosition="left"
+                app:fab_addButtonColorPressed="@color/colorAccent"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="10dp"
+                android:visibility="invisible"
+                >
 
-                <!--<com.getbase.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/accion_favorito"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    fab:fab_colorNormal="?attr/colorAccent"
-                    fab:fab_icon="@mipmap/ic_launcher"
-                    fab:fab_size="mini"
-                    fab:fab_title="b4" />
+                <!--<com.getbase.floatingactionbutton.FloatingActionButton-->
+                    <!--android:id="@+id/accion_favorito"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--fab:fab_colorNormal="?attr/colorAccent"-->
+                    <!--fab:fab_icon="@mipmap/ic_launcher"-->
+                    <!--fab:fab_size="mini"-->
+                    <!--fab:fab_title="b4" />-->
+
+                <!--<com.getbase.floatingactionbutton.FloatingActionButton-->
+                    <!--android:id="@+id/accion_buscar"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--fab:fab_colorNormal="?attr/colorAccent"-->
+                    <!--fab:fab_icon="@mipmap/ic_launcher"-->
+                    <!--fab:fab_size="mini"-->
+                    <!--fab:fab_title="b3" />-->
 
                 <com.getbase.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/accion_buscar"
+                    android:id="@+id/accion_carrito"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    fab:fab_colorNormal="?attr/colorAccent"
-                    fab:fab_icon="@mipmap/ic_launcher"
+                    fab:fab_colorNormal="@color/colorPrimary"
+                    fab:fab_icon="@drawable/icopdf"
+                    app:fab_colorPressed="@color/colorAccent"
                     fab:fab_size="mini"
-                    fab:fab_title="b3" />-->
+                    fab:fab_title="PDF" />
 
-                <!--<com.getbase.floatingactionbutton.FloatingActionButton-->
-                    <!--android:id="@+id/accion_carrito"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--fab:fab_colorNormal="@color/colorPrimary"-->
-                    <!--fab:fab_icon="@drawable/icopdf"-->
-                    <!--app:fab_colorPressed="@color/colorAccent"-->
-                    <!--fab:fab_size="mini"-->
-                    <!--fab:fab_title="PDF" />-->
-
-                <!--<com.getbase.floatingactionbutton.FloatingActionButton-->
-                    <!--android:id="@+id/accion_grafica"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--fab:fab_colorNormal="@color/colorPrimary"-->
-                    <!--fab:fab_icon="@drawable/icografica"-->
-                    <!--app:fab_colorPressed="@color/colorAccent"-->
-                    <!--fab:fab_size="mini"-->
-                    <!--app:fab_title="Grafica"/>-->
-            <!--</com.getbase.floatingactionbutton.FloatingActionsMenu>-->
+                <com.getbase.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/accion_grafica"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    fab:fab_colorNormal="@color/colorPrimary"
+                    fab:fab_icon="@drawable/icografica"
+                    app:fab_colorPressed="@color/colorAccent"
+                    fab:fab_size="mini"
+                    app:fab_title="Grafica"/>
+            </com.getbase.floatingactionbutton.FloatingActionsMenu>
         </LinearLayout>
 
     </FrameLayout>

@@ -16,7 +16,6 @@
         android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/_ly_Top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
@@ -26,7 +25,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
-                android:layout_gravity="start"
+                android:layout_gravity="left"
                 android:layout_marginTop="1dp"
                 android:orientation="vertical">
 
@@ -40,7 +39,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_gravity="left|center"
-                        android:layout_weight="1.2"
+                        android:layout_weight="1.1"
                         android:background="@color/colorPrimary">
 
                         <TextView
@@ -49,7 +48,7 @@
                             android:layout_gravity="center"
                             android:text="Reportes"
                             android:textColor="@color/ap_white"
-                            android:textSize="11sp" />
+                            android:textSize="11dp" />
 
                     </LinearLayout>
 
@@ -91,7 +90,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_gravity="left|center"
-                        android:layout_weight="1.2"
+                        android:layout_weight="1.1"
                         android:background="@color/colorPrimary">
 
                         <TextView
@@ -100,7 +99,7 @@
                             android:layout_gravity="center"
                             android:text="Filtro"
                             android:textColor="@color/ap_white"
-                            android:textSize="11sp" />
+                            android:textSize="11dp" />
 
                     </LinearLayout>
 
@@ -146,7 +145,7 @@
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_gravity="left|center"
-                        android:layout_weight="1.2"
+                        android:layout_weight="1"
                         android:background="@color/colorPrimary">
                         <!-- c_mabg_1 -->
                         <TextView
@@ -155,7 +154,7 @@
                             android:layout_gravity="center"
                             android:text="Agrupación"
                             android:textColor="@color/ap_white"
-                            android:textSize="11sp" />
+                            android:textSize="11dp" />
 
                     </LinearLayout>
 
@@ -190,15 +189,15 @@
 
             <LinearLayout
                 android:id="@+id/_ly_top_right"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:layout_marginLeft="2dp"
+                android:layout_weight="1"
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="28dp"
+                    android:layout_weight="2"
                     android:gravity="center"
                     android:orientation="horizontal">
 
@@ -206,52 +205,48 @@
                         android:id="@+id/txt_consulta"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:gravity="end"
-                        android:text=""
-                        android:textSize="7sp"
-                        android:visibility="invisible" />
+                        android:text="Fecha"
+                        android:textSize="11dp"
+                        android:visibility="visible" />
 
                     <Spinner
                         android:id="@+id/spin_fecha"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="0dp"
-                        android:gravity="start"
-                        android:textAlignment="textStart"
-                        android:textDirection="ltr"
-                        android:spinnerMode="dropdown"
-                        android:padding="0dp" />
-
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"/>
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:gravity="right"
                     android:layout_height="28dp"
+                    android:layout_weight="2"
                     android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/_tv_filtro"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_gravity="start"
-                        android:text=""
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:text="_______"
                         android:textColor="@color/rojote"
                         android:textSize="7sp" />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="28dp"
-                    android:layout_gravity="right"
                     android:layout_marginRight="5dp"
+                    android:layout_weight="1"
                     android:orientation="vertical">
+
                     <ImageButton
                         android:id="@+id/boton_consulta_informacion"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="end"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="right"
                         android:background="@null"
                         android:src="@drawable/btngenera" />
+
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -306,4 +301,3 @@
             android:backgroundTint="@color/rojito" />
     </LinearLayout>
 </RelativeLayout>
-

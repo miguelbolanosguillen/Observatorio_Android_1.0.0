@@ -1,9 +1,13 @@
 package com.example.admin.observav1;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.graphics.Color;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -14,8 +18,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
+import android.view.OrientationEventListener;
+import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -65,12 +72,12 @@ public class ConfiguracionFragment extends Fragment {
     // Para guardar consultas generadas hasta 30 C_mabg_1
     public int n_Col = -1;
     public int n_Ren = -1;
-    private int it = -1, iConta = -1;
-    public String[][][] v_tabla = new String[30][][];   // 30 reportes, n_Columnas , n_Renglones
-    private int[][] v_Col_Ren = new int[30][2];         // Guarda el numero de columnas y de renglones de cada consulta
+    static public int it = -1, iConta = -1;
+    static public String[][][] v_tabla = new String[30][][];   // 30 reportes, n_Columnas , n_Renglones
+    static public int[][] v_Col_Ren = new int[30][2];         // Guarda el numero de columnas y de renglones de cada consulta
     private String[] v_Tit_Fil = new String[30];        // Guarda la descripción de los titulos de los filtros
     private String[][] v_Ren;                           // Auxiliar para llenar v_tabla
-    public Boolean[]    v_ordena;                       // true ascendente , false descendente
+    public Boolean[] v_ordena;                       // true ascendente , false descendente
 
     public static Button[] _btn_rep;
     public static Button[] _btn_filtro;
@@ -81,6 +88,7 @@ public class ConfiguracionFragment extends Fragment {
 
     private c_valor observatorio = new c_valor();
     public String[] a_Agrupa_Des, a_Filtros, a_Agrupa_Campo, a_Cam_Json;
+    static public String[] a_Tit_Cam;
     public String g_reporte = "1";
     private int nCatalogo_Visible = -1;
     public static String g_agrupa;
@@ -101,12 +109,16 @@ public class ConfiguracionFragment extends Fragment {
     static boolean l_Responsabilidad = false;
     boolean l_Agrupa = false;
 
-    LinearLayout linerlista;
+    LinearLayout linerlista,_ly_Top;
     MenuItem fav;
     static boolean interceptScroll = true;
 
     String[] aFechas; // Aqui se guardara la fecha del reporte
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -115,6 +127,8 @@ public class ConfiguracionFragment extends Fragment {
         lv_param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
         setHasOptionsMenu(true);
+
+
 
         /*Button menuboton =(Button)getActivity().findViewById(R.id.action_buscar);
         menuboton.setOnClickListener(new View.OnClickListener() {
@@ -130,7 +144,7 @@ public class ConfiguracionFragment extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        Toast.makeText(getActivity(), "Entro a menu", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "Entro a menu", Toast.LENGTH_SHORT).show();
         // TODO Add your menu entries here
         inflater.inflate(R.menu.menu_appbar, menu);
         super.onCreateOptionsMenu(menu, inflater);
@@ -155,8 +169,49 @@ public class ConfiguracionFragment extends Fragment {
 
     @Override
     public void onStart() {
+        OrientationEventListener mOrientationListener;
         // TODO Auto-generated method stub
         super.onStart();
+        //
+        mOrientationListener = new OrientationEventListener(getActivity(),SensorManager.SENSOR_DELAY_NORMAL) {
+
+            @Override
+            public void onOrientationChanged(int orientation) {
+                _ly_Top = (LinearLayout) getActivity().findViewById(R.id._ly_Top);
+                //Toast.makeText(getActivity(),"Orientation changed to " + orientation,Toast.LENGTH_SHORT).show();
+                if ( orientation==270){
+                    _ly_Top.setVisibility(View.INVISIBLE);
+                    _ly_Top.setVisibility(View.GONE);
+
+                }else{
+                    _ly_Top.setVisibility(View.VISIBLE);
+                }
+
+            }
+        };
+
+        if (mOrientationListener.canDetectOrientation() == true) {
+            //Toast.makeText(getActivity(), "Can detect orientation",Toast.LENGTH_SHORT).show();
+            mOrientationListener.enable();
+        } else {
+            //Toast.makeText(getActivity(), "Cannot detect orientation",Toast.LENGTH_SHORT).show();
+            mOrientationListener.disable();
+        }
+
+//        int rotation = ((WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getRotation();
+//        switch (rotation) {
+//            case Surface.ROTATION_0:
+//            case Surface.ROTATION_180:
+//                //return "vertical";
+//                Toast.makeText(getActivity(),"Vertical cf1St",Toast.LENGTH_SHORT).show();
+//                break;
+//            case Surface.ROTATION_90:
+//            default:
+//                //return "horizontal";
+//                Toast.makeText(getActivity(),"Horizontal cf1St",Toast.LENGTH_SHORT).show();
+//                break;
+//        }
+
         // Estas dos líneas deben ir por que si no marca error en  urlConnection.connect();
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
@@ -182,7 +237,7 @@ public class ConfiguracionFragment extends Fragment {
         botonSe2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Toast.makeText(getActivity(), "este es el boton", Toast.LENGTH_SHORT).show();
+//              Toast.makeText(getActivity(), "este es el boton", Toast.LENGTH_SHORT).show();
                 String v_url, v_par;
 
 
@@ -197,14 +252,25 @@ public class ConfiguracionFragment extends Fragment {
                 a_id_responsabilidad = new ArrayList<>();
                 o_usuario = new c_usuario();
                 o_usuario.c_usuario(g_usr.getText().toString(), g_cve.getText().toString());
+
                 if (o_ldap.m_php_ldap(v_url, v_par, o_usuario)) {
+
                     //Log.d("regreso de ","m_php_ldap");
                     //Log.i("Entro el ldap","valor "+o_ldap.m_php_ldap(v_url,v_par,o_usuario));
-                    if (o_ldap.m_php_jason("consulta_responsabilidades.php", "?usuario=" + g_usr.getText().toString())) {
-
+                    //Toast.makeText(getActivity(),"hola1"+"?usuario=" + g_usr.getText().toString(),Toast.LENGTH_SHORT).show();
+                    if (o_ldap.m_php_jason("consulta_responsabilidadesM.php", "?usuario=" + g_usr.getText().toString())) {
+                        //Toast.makeText(getActivity(),"hola2",Toast.LENGTH_SHORT).show();
                         try {
-                            JSONArray data_array = new JSONArray(o_ldap.getV_cadena_json());
+                            //                         Log.e("cadena:"," "+o_ldap.getV_cadena_json());
+                            //            JSONArray data_array = new JSONArray(o_ldap.getV_cadena_json());
+                            // Se hizo la modificación para cuando el JSON regresa multiples arreglos
+                            JSONObject parentObject = new JSONObject(o_ldap.getV_cadena_json());
+                            JSONArray data_array = parentObject.getJSONArray("Responsabilidades");
+                            //JSONObject oResponsa = parentObject.getJSONObject("Responsabilidades");
+                            //JSONArray data_array = new JSONArray(oResponsa.getJSONArray());
+//                            Log.e("paso","paso");
                             for (int i = 0; i < data_array.length(); i++) {
+                                Log.w("Elemento", data_array.get(i).toString());
                                 JSONObject obj = new JSONObject(data_array.get(i).toString());
                                 a_responsa.add(obj.getString("descripcion"));
                                 a_id_responsabilidad.add(obj.getString("responsabilidad_id"));
@@ -220,8 +286,8 @@ public class ConfiguracionFragment extends Fragment {
 
 
                         } catch (JSONException e) {
-                            // e.printStackTrace();
-                            Log.w("Catch JSOn", "responsabilidad");
+                            e.printStackTrace();
+                            //Log.w("Catch JSOn", "responsabilidad");
                         }
                     } else {
                         Toast.makeText(getActivity(), "No logro abrir consulta de responsabilidades", Toast.LENGTH_SHORT).show();
@@ -340,7 +406,7 @@ public class ConfiguracionFragment extends Fragment {
                 observatorio.setFecha("");
                 observatorio.setAnio("");
                 observatorio.setPeriodo("");
-                otxt_fecha.setText("Fecha");
+                otxt_fecha.setText("Fecha:");
 
 
                 MainActivity act1 = (MainActivity) getActivity();
@@ -428,7 +494,7 @@ public class ConfiguracionFragment extends Fragment {
 // =================================================== Leo el pres_reports_column para saber que columnas necesito traer
         llena_encabezados();
 // ========================================================================================================
-        // Log.i("Genera consulta","genera_consultaResp.php"+cPar);
+        //Log.i("Genera consulta","genera_consultaResp.php"+cPar);
 
         if (o_ldap.m_php_jason("genera_consultaResp.php", cPar)) {
 
@@ -602,7 +668,7 @@ public class ConfiguracionFragment extends Fragment {
         //_ly.addView(btn_);
         // _ly.addView(btn_, lv_param); C_mabg_1
         // C_mabg_1
-        _ly.addView(btn_, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT / 2, ViewGroup.LayoutParams.WRAP_CONTENT));
+        _ly.addView(btn_, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         btn1 = (Button) getActivity().findViewById(id_);
         if (cFiltro.equals("R")) {   // Reportes
@@ -653,7 +719,8 @@ public class ConfiguracionFragment extends Fragment {
         iConta = -1;
         l_Agrupa = false;
         TableLayout _tab_w;
-
+//
+        despliega_contador(iConta);
 //      Remuevo el contenido de las tablas donde se presenta la información egenrada
         _tab_w = (TableLayout) getActivity().findViewById(R.id._TablaA);
         if (_tab_w != null)
@@ -689,9 +756,11 @@ public class ConfiguracionFragment extends Fragment {
         cSql = "?sql=select-field,descripcion,tableCatalogo,fieldDescrip,tablemain-from-pres_reports_rows-" +
                 "where-idreportGenera=" + idReportGe[btn.getId()] + "-order-by-idrow";
         // Toast.makeText(this, cSql , Toast.LENGTH_SHORT).show();
+        //Log.i("Sql",cSql);
 
         if (o_ldap.m_php_jason("genera_json.php", cSql)) {
             try {
+                String sW = "";
                 JSONArray data_array = new JSONArray(o_ldap.getV_cadena_json());
                 nGrp = data_array.length();
                 a_Agrupa_Des = new String[nGrp];
@@ -701,9 +770,14 @@ public class ConfiguracionFragment extends Fragment {
                     a_Agrupa_Des[i] = (obj.getString("descripcion"));
                     a_Agrupa_Campo[i] = (obj.getString("field"));
                     //idReportGe[i] = (obj.getString("idreportgenera"));
-                    observatorio.setTabla(obj.getString("tablemain"));
-                }
+                    sW = obj.getString("tablemain");
 
+                }
+                if (sW.compareTo("Consulta") == 0) {
+                    sW = "Consulta_diario";
+                }
+                observatorio.setTabla(sW);
+                Log.d("*****SW", sW);
 
                 _btn_agrupa = new Button[nGrp];
                 _ly_agrupa = (LinearLayout) getActivity().findViewById(R.id._ly_agrupa);
@@ -727,6 +801,7 @@ public class ConfiguracionFragment extends Fragment {
         cSql = "?sql=select-fc_nombre,fc_descripcion,anio-from-archivos-where-" +
                 "idreportgenera=" + observatorio.getIdreporte() + "-and-fi_estatus='2'-and-" +
                 "select_table='" + observatorio.getTabla() + "'-order-by-fc_nombre-desc-limit-1";
+        Log.i("Fecha Sql", cSql);
         if (o_ldap.m_php_jason("genera_json.php", cSql)) {
             try {
                 String cFecha, cPeriodo, cAnio;
@@ -746,7 +821,7 @@ public class ConfiguracionFragment extends Fragment {
                 observatorio.setPeriodo(cPeriodo);
                 if (cFecha != "") {
                     // Asigno la última fecha al textView
-                    otxt_fecha.setText(cFecha);
+                    //otxt_fecha.setText(cFecha);
                     aFechas = new String[1];
                     aFechas[0] = cFecha;
                     oSpin_Fecha.setAdapter(new ArrayAdapter<String>(g_contexto, R.layout.spinner_item, aFechas));
@@ -757,7 +832,7 @@ public class ConfiguracionFragment extends Fragment {
                 Log.w("**** Fechas:->", cSql);
             }
         } else {
-            otxt_fecha.setText("Sin Fecha");
+            //otxt_fecha.setText("Sin Fecha");
             Log.w("fechas:>>>", cSql);
             Toast.makeText(g_contexto, "Inconsistencia 1 " + cSql, Toast.LENGTH_SHORT).show();
         }
@@ -765,7 +840,7 @@ public class ConfiguracionFragment extends Fragment {
 //      *********************************** Filtros asociados al reporte.
         cSql = "?sql=select-namefilter,field,fielddescrip,tablecatalog,tablemain-from-pres_reports_secondary_filters-" +
                 "where-idreportGenera=" + idReportGe[btn.getId()] + "-order-by-idsecondaryfilter";
-
+        //Log.i("Filtro Sql",cSql);
         g_reporte = idReportGe[btn.getId()];
         if (o_ldap.m_php_jason("genera_json.php", cSql)) {
             try {
@@ -900,7 +975,10 @@ public class ConfiguracionFragment extends Fragment {
         String cPar;
         // ArrayList<String> a_Cves = new ArrayList<String>();      // MVP_1_0
         ArrayList<c_filtro> a_cFiltros = new ArrayList<c_filtro>(); // MVP_1_0
-        String cSql = "?sql=select-" + v_Campo + "," + v_Descripcion + "-from-" + v_Tabla + "-where-anio='" + cAnio + "'-order-by-" + v_Campo;
+        //String cSql = "?sql=select-" + v_Campo + "," + v_Descripcion + "-from-" + v_Tabla +
+        //        "-where-anio='" + cAnio + "'-order-by-" + v_Campo;
+        // TODO : Falta definir de donde va a buscar si Consulta_diario o Consulta para el edo del ejercicio
+
         cPar = "?tableMain=noimporta" +
                 "&tableCatalog=" + v_Tabla +
                 "&field=" + v_Campo +
@@ -934,7 +1012,7 @@ public class ConfiguracionFragment extends Fragment {
                 Log.w("catch error", "JSON trae cves");
             }
         } else {
-            Toast.makeText(g_contexto, "Inconsistencia 2 " + cSql, Toast.LENGTH_SHORT).show();
+            Toast.makeText(g_contexto, "Inconsistencia 2 " + cPar, Toast.LENGTH_SHORT).show();
         }
         return a_cFiltros;                                                          // MVP_1_0;
     }
@@ -974,6 +1052,7 @@ public class ConfiguracionFragment extends Fragment {
                 fila_B.setLayoutParams(layoutFila);
                 n_Col = data_array.length();         // c_mabg_1
                 a_Cam_Json = new String[n_Col];     // c_mabg_1
+                a_Tit_Cam = new String[n_Col];
                 a_Alto = new Integer[n_Col];    // c_mabg_1
                 a_Ancho = new Integer[n_Col];    // c_mabg_1
                 a_Tamano = new Integer[n_Col];    // c_mabg_1
@@ -983,6 +1062,7 @@ public class ConfiguracionFragment extends Fragment {
                     a_Alto[i] = obj.getInt("height") + 5;
                     a_Ancho[i] = obj.getInt("width") + 45;
                     a_Tamano[i] = obj.getInt("sizefont");
+                    a_Tit_Cam[i] = obj.getString("nametitle");
                     TextView texto = new TextView(getActivity());
                     cColor = obj.getString("colorbutton");
                     cSegundo = obj.getString("secondarytextbutton");
@@ -991,7 +1071,7 @@ public class ConfiguracionFragment extends Fragment {
 
                     texto.setBackgroundColor(Color.parseColor("#" + cColor));
                     texto.setTextColor(Color.WHITE);
-                    texto.setText(obj.getString("nametitle"));
+                    texto.setText(a_Tit_Cam[i]);
                     texto.setWidth(a_Ancho[i]);
                     texto.setHeight(a_Alto[i]);
                     texto.setTextSize(a_Tamano[i]);
@@ -1088,11 +1168,12 @@ public class ConfiguracionFragment extends Fragment {
 
     }
 
+    //  ========================================================================================
     public void click_ordena_columna(View v) {
         int nCol = v.getId();
         int nColumnas = v_Col_Ren[it][0];
         int nRenglones = (v_Col_Ren[it][1]) - 1;
-        int nRen = (v_tabla[iConta][nCol].length) - 1;
+        //int nRen = (v_tabla[iConta][nCol].length) - 1;
         Boolean l_Numero = false, l_Cambia = false;
         String[] v_Aux = new String[nColumnas];
         String cValor, cAnt, cPost;
@@ -1100,7 +1181,7 @@ public class ConfiguracionFragment extends Fragment {
 
         Log.d("Columna " + nCol, " Renglones=" + nRenglones + " Columnas " + nColumnas);
         cValor = v_tabla[iConta][nCol][0];
-        // Si el strins es igual mayusculas y minusculas , entonces es un número
+        // Si el string es igual mayusculas y minusculas , entonces es un número
         l_Numero = cValor.toLowerCase() == cValor.toUpperCase();
         for (int i = 0; i < nRenglones; i++) {
             for (int j = i + 1; j < nRenglones; j++) {
@@ -1112,14 +1193,14 @@ public class ConfiguracionFragment extends Fragment {
                     cPost = (cPost.trim()).replaceAll(",", "");
                     dAnt = Double.parseDouble(cAnt);
                     dPost = Double.parseDouble(cPost);
-                    if ( dAnt > dPost)
+                    if (dAnt > dPost)
                         l_Cambia = true;
                 } else {
                     if (cAnt.compareToIgnoreCase(cPost) > 0) {
                         l_Cambia = true;
                     }
                 }
-                if ( l_Cambia ) {
+                if (l_Cambia) {
                     for (int z = 0; z < nColumnas; z++) {
                         v_Aux[z] = v_tabla[iConta][z][i];
                     }
@@ -1264,7 +1345,7 @@ public class ConfiguracionFragment extends Fragment {
             iConta = it;
         }
 //      Log.d("it=",it+" "+cFiltro);
-        v_Tit_Fil[it] = cFiltro.replaceAll("&filtro\\d=", "");
+        v_Tit_Fil[it] = cFiltro.replaceAll("&filtro\\d=", "");              // quita &filtro1= o &filtro2=
         v_Tit_Fil[it] = v_Tit_Fil[it].replaceAll("&valorFiltro\\d", "");
         despliega_contador(iConta);
         v_tabla[it] = new String[n_Col][n_Ren];     // [n_Ren + 1]; no guardo los encabezados;
@@ -1419,7 +1500,9 @@ public class ConfiguracionFragment extends Fragment {
         TextView _tv_Conta = (TextView) getActivity().findViewById(R.id._tv_Conta);
         _tv_Conta.setText(String.valueOf(iConta + 1));
         //       Log.i("iConta","="+(iConta)+" "+v_Tit_Fil[iConta+1]);
-        _tv_Filtro.setText(v_Tit_Fil[iConta]);
+        if (iConta > 0) {
+            _tv_Filtro.setText(v_Tit_Fil[iConta]);
+        }
     }
     // ============================================================= c_mabg_1
 

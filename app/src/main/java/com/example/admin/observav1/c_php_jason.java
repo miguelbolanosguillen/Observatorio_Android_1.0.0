@@ -97,7 +97,7 @@ public class c_php_jason {
     boolean m_php_jason(String p_pag, String p_par) {
         boolean l_si_hay_datos = false;
         this.v_cadena_json = "";
-//      Log.d("pagina",this.s_home+p_pag+p_par);
+//        Log.d("pagina",this.s_home+p_pag+p_par);
         if ((urlConnection = regresa_conexion(this.s_home + p_pag + p_par, true)) != null) {
             l_si_hay_datos = true;
             try {
@@ -115,11 +115,11 @@ public class c_php_jason {
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 // e.printStackTrace();
-                Log.d("Catch IOException", " c_php_jason");
+                Log.d("Catch IOException", " c_php_jason1");
             } catch (JSONException e) {
                 // TODO Auto-generated catch block
                 //e.printStackTrace();
-                Log.d("Catch JSONException", " c_php_jason");
+                Log.d("Catch JSONException", " c_php_jason2");
             }
         }
         return l_si_hay_datos;
@@ -147,17 +147,17 @@ public class c_php_jason {
                 urlConnection.disconnect();
                 urlConnection = null;
             } else {
-                Log.w("Ok:", "!!!!Página respondió!!!!");
+ //               Log.w("Ok:", "!!!!Página respondió!!!!");
             }
 
         } catch (MalformedURLException e) {
             // TODO Auto-generated catch block
             //e.printStackTrace();
-            Log.d("MalformedURLException2", " c_php_jason");
+            Log.d("MalformedURLException2", " c_php_jason3");
         } catch (IOException e) {
             // TODO Auto-generated catch block
             //e.printStackTrace();
-            Log.d("IOException2", " c_php_jason");
+            Log.d("IOException2", " c_php_jason4");
         }
         return urlConnection;
     }
