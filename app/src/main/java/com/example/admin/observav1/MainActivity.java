@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements MiComunicacion {
     FloatingActionsMenu famb;
     String pro = "";
     public static Context g_contexto;
-
+    static public float nDensidad;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,7 +99,8 @@ public class MainActivity extends AppCompatActivity implements MiComunicacion {
 
         sT1 = "Ancho de la Pantalla " + Integer.toString(display.getWidth());
         sT2 = "Alto de la pantalla " + Integer.toString(display.getHeight());
-        sT3 = "Densidad de la pantalla (dpi) " + getResources().getDisplayMetrics().densityDpi;
+        nDensidad = getResources().getDisplayMetrics().densityDpi;
+        sT3 = "Densidad de la pantalla (dpi) " + nDensidad;
 
         float scale = getApplicationContext().getResources().getDisplayMetrics().density;
         sT4 = "Escala " + Float.toString(getApplicationContext().getResources().getDisplayMetrics().density);
@@ -111,21 +112,22 @@ public class MainActivity extends AppCompatActivity implements MiComunicacion {
 
         DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
-
+        sT5 = "Density "+metrics.densityDpi+ " DH="+DisplayMetrics.DENSITY_HIGH + " DM="+DisplayMetrics.DENSITY_MEDIUM +
+              " DL="+DisplayMetrics.DENSITY_LOW;
         switch(metrics.densityDpi)
         {
-            case DisplayMetrics.DENSITY_HIGH: //HDPI
+            case DisplayMetrics.DENSITY_XXXHIGH: //HDPI
                 sT5 = "Alta Densidad";
                 scaleDensity = scale * 240;
                 pixelBoton = dips * (scaleDensity / 240);
                 break;
-            case DisplayMetrics.DENSITY_MEDIUM: //MDPI
+            case DisplayMetrics.DENSITY_XXHIGH: //MDPI
                 sT5 = "mediana Densidad";
                 scaleDensity = scale * 160;
                 pixelBoton = dips * (scaleDensity / 160);
                 break;
 
-            case DisplayMetrics.DENSITY_LOW:  //LDPI
+            case DisplayMetrics.DENSITY_XHIGH:  //LDPI
                 sT5 = "baja Densidad";
                 scaleDensity = scale * 120;
                 pixelBoton = dips * (scaleDensity / 120);

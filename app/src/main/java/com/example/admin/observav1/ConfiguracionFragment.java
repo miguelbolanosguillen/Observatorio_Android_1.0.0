@@ -52,6 +52,7 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
 import static android.content.Context.LOCATION_SERVICE;
 import static com.example.admin.observav1.MainActivity.g_contexto;
 import static com.example.admin.observav1.MainActivity.l_EdoEjer;
+import static com.example.admin.observav1.MainActivity.nDensidad;
 
 public class ConfiguracionFragment extends Fragment {
     Button botonSe2, botonCancelar, botonCerrarSesion, btn_ant, btn_sig;
@@ -500,7 +501,7 @@ public class ConfiguracionFragment extends Fragment {
 
             try {
                 Boolean l_JSon = true;
-
+                Integer nAnchCol = 0;
                 a_Cam_Json[0] = g_agrupa;
 
                 TableLayout _tab_C, _tab_D;
@@ -511,6 +512,8 @@ public class ConfiguracionFragment extends Fragment {
 
                 _tab_C.removeAllViews();
                 _tab_D.removeAllViews();
+
+
 
                 JSONArray data_array = new JSONArray(o_ldap.getV_cadena_json());
                 n_Ren = data_array.length();                    // C_mabg_1
@@ -537,7 +540,7 @@ public class ConfiguracionFragment extends Fragment {
                     for (int j = 0; j < n_Col; j++) {       // C_mabg_1 Columnas  a_Cam_Json
                         TextView texto = new TextView(getActivity());
                         texto.setText(obj.getString(a_Cam_Json[j]));
-                        texto.setWidth(a_Ancho[j]);
+                        texto.setWidth(a_Ancho[j]+nAnchCol);
                         texto.setHeight(a_Alto[j] + 30);
                         texto.setTextSize(a_Tamano[j] - 2);
                         //Log.e(a_Cam_Json[j],obj.getString(a_Cam_Json[j]));
@@ -1021,7 +1024,10 @@ public class ConfiguracionFragment extends Fragment {
     // ==========================================================================================================
     void llena_encabezados() {
         String cSql, cMovible, cNo, cSegundo, cColor;
-        Boolean l_segundo_renglon = false;
+        Boolean l_segundo_renglon = false , l_Vertical=false;
+        Integer nAnchCol=0;
+        l_Vertical = esta_vertical();
+
         cSql = "?sql=select-*-from-pres_reports_column-where-idreportgenera=" + g_reporte + "order-by-idcolumnrepor";
         cNo = "NO";
         nCol_Fijas = -1;
@@ -1033,7 +1039,11 @@ public class ConfiguracionFragment extends Fragment {
                 //      2	            1	        Descripción	NO	                    descripcion	            3	    NO	    NO	    190	    50	    12	        CLEAR	    0x360A3D	#2f2e2e	    0.4	        Clave	 	                    373737
                 //      3	            1	        Aprobado	presupuesto_aprobado	presupuesto_aprobado	2	    YES	    sum	    110	    50	    11	        CLEAR	    0x360A3D	#2f2e2e	    0.4	        Cantidad	Anual	            950054	        Aprob.
 
-
+                if ( nDensidad > 320) {
+                    nAnchCol = 160;
+                } else {
+                    nAnchCol = 0;
+                }
                 TableLayout _tab_A, _tab_B;
                 TableLayout.LayoutParams layOutRenglon;
 
@@ -1059,8 +1069,34 @@ public class ConfiguracionFragment extends Fragment {
                 for (int i = 0; i < n_Col; i++) {   // c_mabg_1
                     JSONObject obj = new JSONObject(data_array.get(i).toString());
                     a_Cam_Json[i] = obj.getString("namejson");
-                    a_Alto[i] = obj.getInt("height") + 5;
-                    a_Ancho[i] = obj.getInt("width") + 45;
+                    if ( nDensidad > 320 ) {
+                        a_Alto[i] = obj.getInt("height") + 55;
+                    }else {
+                        a_Alto[i] = obj.getInt("height") + 5;
+                    }
+                    switch (i){
+                        case 0:// columna clave
+                            if ( nDensidad > 320 ) {
+                                a_Ancho[i] = obj.getInt("width") + 90;
+                            }else {
+                                a_Ancho[i] = obj.getInt("width") + 45;
+                            }
+                            break;
+                        case 1: // columna descripción
+                            if ( nDensidad > 320 ) {
+                                if ( l_Vertical)
+                                    a_Ancho[i] = obj.getInt("width") + 210 + nAnchCol;
+                                else
+                                    a_Ancho[i] = obj.getInt("width") + 400 + nAnchCol;
+                            }else {
+                                a_Ancho[i] = obj.getInt("width") + 45 + nAnchCol;
+                            }
+                            break;
+                        default:
+                            a_Ancho[i] = obj.getInt("width") + 45 + nAnchCol;
+                            break;
+                    }
+
                     a_Tamano[i] = obj.getInt("sizefont");
                     a_Tit_Cam[i] = obj.getString("nametitle");
                     TextView texto = new TextView(getActivity());
@@ -1520,5 +1556,22 @@ public class ConfiguracionFragment extends Fragment {
 
     }
 
+    public boolean esta_vertical(){
+        int rotation = ((WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getRotation();
+        switch (rotation) {
+            case Surface.ROTATION_0:
+            case Surface.ROTATION_180:
+                //return "vertical";
+                //Toast.makeText(getActivity(),"Vertical cf1St",Toast.LENGTH_SHORT).show();
+                //break;
+                return true;
+            case Surface.ROTATION_90:
+            default:
+                //return "horizontal";
+                //Toast.makeText(getActivity(),"Horizontal cf1St",Toast.LENGTH_SHORT).show();
+                //break;
+                return false;
+        }
+    }
 
 }
