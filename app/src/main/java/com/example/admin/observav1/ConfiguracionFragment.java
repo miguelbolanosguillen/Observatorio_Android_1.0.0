@@ -173,7 +173,7 @@ public class ConfiguracionFragment extends Fragment {
         OrientationEventListener mOrientationListener;
         // TODO Auto-generated method stub
         super.onStart();
-        //
+        // //
         mOrientationListener = new OrientationEventListener(getActivity(),SensorManager.SENSOR_DELAY_NORMAL) {
 
             @Override
