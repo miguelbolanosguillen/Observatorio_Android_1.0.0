@@ -68,7 +68,7 @@ public class ConfiguracionFragment extends Fragment {
     public String[] a_reportes = new String[10];
     public String[] idReportGe = new String[10];
     public LinearLayout _ly_reporte, _ly_agrupa, _ly_filtros;
-    public LinearLayout.LayoutParams lv_param;
+    // public LinearLayout.LayoutParams lv_param;
 
     // Para guardar consultas generadas hasta 30 C_mabg_1
     public int n_Col = -1;
@@ -125,8 +125,7 @@ public class ConfiguracionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        lv_param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
+        //lv_param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);
         setHasOptionsMenu(true);
 
 
@@ -613,7 +612,8 @@ public class ConfiguracionFragment extends Fragment {
                     _ly_reporte = (LinearLayout) getActivity().findViewById(R.id._ly_reportes);
                     _ly_reporte.removeAllViews();
                     for (int i = 0; i < nRep; i++) {
-                        adiciona_boton(_ly_reporte, i, lv_param, "R", a_reportes);
+                        //adiciona_boton(_ly_reporte, i, lv_param, "R", a_reportes);
+                        adiciona_boton(_ly_reporte, i, "R", a_reportes);
                     }
                 }
 
@@ -628,18 +628,19 @@ public class ConfiguracionFragment extends Fragment {
     }
 
     //  =============================================================================================================
-    public void adiciona_boton(LinearLayout _ly, int pos, LinearLayout.LayoutParams lv_param,
-                               final String cFiltro, String[] aTitulo) {
+    //public void adiciona_boton(LinearLayout _ly, int pos, LinearLayout.LayoutParams lv_param,
+    //                           final String cFiltro, String[] aTitulo) {
+    public void adiciona_boton(LinearLayout _ly, int pos, final String cFiltro, String[] aTitulo) {
         Button btn_;
         String cVal;
         Button btn1;
         int nPos;
 
-        lv_param.width = 160;
+        //lv_param.width = 160;
         //lv_param.height = 63;
-        lv_param.height = 53;       // C_mabg_1
-        lv_param.rightMargin = 0;
-        lv_param.topMargin = 0;
+        //lv_param.height = 53;       // C_mabg_1
+        //lv_param.rightMargin = 0;
+        //lv_param.topMargin = 0;
         nPos = 0;
         switch (cFiltro) {
             case "R": {
@@ -665,13 +666,14 @@ public class ConfiguracionFragment extends Fragment {
         //Log.d("Titulo=",cVal);
 
         btn_.setText(cVal);
-        btn_.setTextSize((float) 6);
+        btn_.setTextSize((float) 8);
         //Log.d("Texto",btn_.getText().toString());
 
         //_ly.addView(btn_);
         // _ly.addView(btn_, lv_param); C_mabg_1
         // C_mabg_1
-        _ly.addView(btn_, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        //_ly.addView(btn_, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        _ly.addView(btn_, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
         btn1 = (Button) getActivity().findViewById(id_);
         if (cFiltro.equals("R")) {   // Reportes
@@ -786,7 +788,8 @@ public class ConfiguracionFragment extends Fragment {
                 _ly_agrupa = (LinearLayout) getActivity().findViewById(R.id._ly_agrupa);
                 _ly_agrupa.removeAllViews();
                 for (int i = 0; i < nGrp; i++) {
-                    adiciona_boton(_ly_agrupa, i, lv_param, "G", a_Agrupa_Des);
+                    // adiciona_boton(_ly_agrupa, i, lv_param, "G", a_Agrupa_Des);
+                    adiciona_boton(_ly_agrupa, i,  "G", a_Agrupa_Des);
                 }
 
             } catch (JSONException e) {
@@ -875,7 +878,8 @@ public class ConfiguracionFragment extends Fragment {
 
                 for (int i = 0; i < nFil; i++) {
 
-                    adiciona_boton(_ly_filtros, i, lv_param, "F", a_Filtros);
+                    //adiciona_boton(_ly_filtros, i, lv_param, "F", a_Filtros);
+                    adiciona_boton(_ly_filtros, i,  "F", a_Filtros);
                     adiciona_filtro(aFilDat[i], i);
                 }
 
@@ -1536,7 +1540,7 @@ public class ConfiguracionFragment extends Fragment {
         TextView _tv_Conta = (TextView) getActivity().findViewById(R.id._tv_Conta);
         _tv_Conta.setText(String.valueOf(iConta + 1));
         //       Log.i("iConta","="+(iConta)+" "+v_Tit_Fil[iConta+1]);
-        if (iConta > 0) {
+        if (iConta >= 0) {
             _tv_Filtro.setText(v_Tit_Fil[iConta]);
         }
     }
