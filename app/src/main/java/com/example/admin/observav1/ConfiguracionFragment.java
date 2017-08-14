@@ -51,6 +51,7 @@ import java.util.Comparator;
 import static android.content.Context.INPUT_METHOD_SERVICE;
 import static android.content.Context.LOCATION_SERVICE;
 import static com.example.admin.observav1.MainActivity.g_contexto;
+import static com.example.admin.observav1.MainActivity.lEstableta;
 import static com.example.admin.observav1.MainActivity.l_EdoEjer;
 import static com.example.admin.observav1.MainActivity.nDensidad;
 
@@ -110,7 +111,7 @@ public class ConfiguracionFragment extends Fragment {
     static boolean l_Responsabilidad = false;
     boolean l_Agrupa = false;
 
-    LinearLayout linerlista,_ly_Top;
+    LinearLayout linerlista, _ly_Top;
     MenuItem fav;
     static boolean interceptScroll = true;
 
@@ -173,20 +174,20 @@ public class ConfiguracionFragment extends Fragment {
         // TODO Auto-generated method stub
         super.onStart();
         // //
-        mOrientationListener = new OrientationEventListener(getActivity(),SensorManager.SENSOR_DELAY_NORMAL) {
+        mOrientationListener = new OrientationEventListener(getActivity(), SensorManager.SENSOR_DELAY_NORMAL) {
 
             @Override
             public void onOrientationChanged(int orientation) {
                 _ly_Top = (LinearLayout) getActivity().findViewById(R.id._ly_Top);
                 //Toast.makeText(getActivity(),"Orientation changed to " + orientation,Toast.LENGTH_SHORT).show();
-                if ( orientation==270){
-                    _ly_Top.setVisibility(View.INVISIBLE);
-                    _ly_Top.setVisibility(View.GONE);
-
-                }else{
-                    _ly_Top.setVisibility(View.VISIBLE);
+                if ( !lEstableta) {
+                    if (orientation == 270) {
+                        _ly_Top.setVisibility(View.INVISIBLE);
+                        _ly_Top.setVisibility(View.GONE);
+                    } else {
+                        _ly_Top.setVisibility(View.VISIBLE);
+                    }
                 }
-
             }
         };
 
@@ -513,7 +514,6 @@ public class ConfiguracionFragment extends Fragment {
                 _tab_D.removeAllViews();
 
 
-
                 JSONArray data_array = new JSONArray(o_ldap.getV_cadena_json());
                 n_Ren = data_array.length();                    // C_mabg_1
                 v_Ren = new String[n_Col][n_Ren];               // C_mabg_1
@@ -539,7 +539,7 @@ public class ConfiguracionFragment extends Fragment {
                     for (int j = 0; j < n_Col; j++) {       // C_mabg_1 Columnas  a_Cam_Json
                         TextView texto = new TextView(getActivity());
                         texto.setText(obj.getString(a_Cam_Json[j]));
-                        texto.setWidth(a_Ancho[j]+nAnchCol);
+                        texto.setWidth(a_Ancho[j] + nAnchCol);
                         texto.setHeight(a_Alto[j] + 30);
                         texto.setTextSize(a_Tamano[j] - 2);
                         //Log.e(a_Cam_Json[j],obj.getString(a_Cam_Json[j]));
@@ -789,7 +789,7 @@ public class ConfiguracionFragment extends Fragment {
                 _ly_agrupa.removeAllViews();
                 for (int i = 0; i < nGrp; i++) {
                     // adiciona_boton(_ly_agrupa, i, lv_param, "G", a_Agrupa_Des);
-                    adiciona_boton(_ly_agrupa, i,  "G", a_Agrupa_Des);
+                    adiciona_boton(_ly_agrupa, i, "G", a_Agrupa_Des);
                 }
 
             } catch (JSONException e) {
@@ -879,7 +879,7 @@ public class ConfiguracionFragment extends Fragment {
                 for (int i = 0; i < nFil; i++) {
 
                     //adiciona_boton(_ly_filtros, i, lv_param, "F", a_Filtros);
-                    adiciona_boton(_ly_filtros, i,  "F", a_Filtros);
+                    adiciona_boton(_ly_filtros, i, "F", a_Filtros);
                     adiciona_filtro(aFilDat[i], i);
                 }
 
@@ -1028,8 +1028,8 @@ public class ConfiguracionFragment extends Fragment {
     // ==========================================================================================================
     void llena_encabezados() {
         String cSql, cMovible, cNo, cSegundo, cColor;
-        Boolean l_segundo_renglon = false , l_Vertical=false;
-        Integer nAnchCol=0;
+        Boolean l_segundo_renglon = false, l_Vertical = false;
+        Integer nAnchCol = 0;
         l_Vertical = esta_vertical();
 
         cSql = "?sql=select-*-from-pres_reports_column-where-idreportgenera=" + g_reporte + "order-by-idcolumnrepor";
@@ -1043,7 +1043,7 @@ public class ConfiguracionFragment extends Fragment {
                 //      2	            1	        Descripción	NO	                    descripcion	            3	    NO	    NO	    190	    50	    12	        CLEAR	    0x360A3D	#2f2e2e	    0.4	        Clave	 	                    373737
                 //      3	            1	        Aprobado	presupuesto_aprobado	presupuesto_aprobado	2	    YES	    sum	    110	    50	    11	        CLEAR	    0x360A3D	#2f2e2e	    0.4	        Cantidad	Anual	            950054	        Aprob.
 
-                if ( nDensidad > 320) {
+                if (nDensidad > 320) {
                     nAnchCol = 160;
                 } else {
                     nAnchCol = 0;
@@ -1073,26 +1073,26 @@ public class ConfiguracionFragment extends Fragment {
                 for (int i = 0; i < n_Col; i++) {   // c_mabg_1
                     JSONObject obj = new JSONObject(data_array.get(i).toString());
                     a_Cam_Json[i] = obj.getString("namejson");
-                    if ( nDensidad > 320 ) {
+                    if (nDensidad > 320) {
                         a_Alto[i] = obj.getInt("height") + 55;
-                    }else {
+                    } else {
                         a_Alto[i] = obj.getInt("height") + 5;
                     }
-                    switch (i){
+                    switch (i) {
                         case 0:// columna clave
-                            if ( nDensidad > 320 ) {
+                            if (nDensidad > 320) {
                                 a_Ancho[i] = obj.getInt("width") + 90;
-                            }else {
+                            } else {
                                 a_Ancho[i] = obj.getInt("width") + 45;
                             }
                             break;
                         case 1: // columna descripción
-                            if ( nDensidad > 320 ) {
-                                if ( l_Vertical)
+                            if (nDensidad > 320) {
+                                if (l_Vertical)
                                     a_Ancho[i] = obj.getInt("width") + 210 + nAnchCol;
                                 else
                                     a_Ancho[i] = obj.getInt("width") + 400 + nAnchCol;
-                            }else {
+                            } else {
                                 a_Ancho[i] = obj.getInt("width") + 45 + nAnchCol;
                             }
                             break;
@@ -1560,7 +1560,7 @@ public class ConfiguracionFragment extends Fragment {
 
     }
 
-    public boolean esta_vertical(){
+    public boolean esta_vertical() {
         int rotation = ((WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getRotation();
         switch (rotation) {
             case Surface.ROTATION_0:

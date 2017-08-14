@@ -9,13 +9,15 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.MenuItem;
-import android.view.Surface;
+
 import android.view.View;
 import android.view.WindowManager;
+import android.webkit.WebView;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
@@ -40,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements MiComunicacion {
     String pro = "";
     public static Context g_contexto;
     static public float nDensidad;
+    static public boolean lEstableta;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +105,27 @@ public class MainActivity extends AppCompatActivity implements MiComunicacion {
         nDensidad = getResources().getDisplayMetrics().densityDpi;
         sT3 = "Densidad de la pantalla (dpi) " + nDensidad;
 
+//        if(getResources().getBoolean(R.bool.isTablet)) {
+//            lEstableta = true;
+//        } else {
+//            lEstableta = false;
+//        }
+
+//        TelephonyManager manager = (TelephonyManager)this.getSystemService(Context.TELEPHONY_SERVICE);
+//        if(manager.getPhoneType() == TelephonyManager.PHONE_TYPE_NONE){
+//            lEstableta = true;;// En una tablet no hay telefono ?
+//        }else{
+//            lEstableta = false;//Esta asignado un telefono
+//        }
+//      ________________________________________________________________________
+        String ua=new WebView(this).getSettings().getUserAgentString();
+        if(ua.contains("Mobile")){
+            lEstableta = false;
+        }else{
+            lEstableta = true;
+        }
+//      ________________________________________________________________________
+
         float scale = getApplicationContext().getResources().getDisplayMetrics().density;
         sT4 = "Escala " + Float.toString(getApplicationContext().getResources().getDisplayMetrics().density);
         sT5 = "";
@@ -133,6 +157,7 @@ public class MainActivity extends AppCompatActivity implements MiComunicacion {
                 pixelBoton = dips * (scaleDensity / 120);
                 break;
         }
+        sT5 = sT5+ " Es tableta ?"+lEstableta;
         Toast.makeText(this,sT1+" "+sT2+" "+sT3+" "+sT4+" "+sT5+" PixelBoton="+Float.toString(pixelBoton),Toast.LENGTH_LONG).show();
         Log.d(getClass().getSimpleName(), sT1+" "+sT2+" "+sT3+" "+sT4+" "+sT5+" PixelBoton="+pixelBoton);
 
